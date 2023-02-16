@@ -20,7 +20,7 @@ public class PersonaClienteRequest implements Serializable {
 
     private String telefono;
 
-    private String ubicacion;
+    private String direccion;
 
     private Date fechaNacimiento;
 

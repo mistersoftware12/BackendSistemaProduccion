@@ -2,14 +2,16 @@ package com.Biblioteca.Service;
 
 import com.Biblioteca.DTO.Persona.*;
 import com.Biblioteca.Exceptions.BadRequestException;
+import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Persona.Cliente;
 import com.Biblioteca.Models.Persona.Persona;
 import com.Biblioteca.Models.Persona.Usuario;
 import com.Biblioteca.Models.Roles.Roles;
 
-import com.Biblioteca.Repository.Persona.ClienteRepository;
-import com.Biblioteca.Repository.Persona.PersonaRepository;
-import com.Biblioteca.Repository.Persona.UsuarioRepository;
+import com.Biblioteca.Models.Persona.ClienteRepository;
+import com.Biblioteca.Models.Persona.PersonaRepository;
+import com.Biblioteca.Models.Persona.UsuarioRepository;
+import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Repository.RolesRepository;
 
 import com.Biblioteca.Security.jwt.JwtUtil;
@@ -23,8 +25,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +47,9 @@ public class PersonaService implements UserDetailsService {
     private RolesRepository rolesRepository;
 
     @Autowired
+    private SucursalRepository sucursalRepository;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtUtil jwtUtil;
@@ -63,14 +66,16 @@ public class PersonaService implements UserDetailsService {
             newPersona.setNombres(personaUsuarioRequest.getNombres());
             newPersona.setTelefono(personaUsuarioRequest.getTelefono());
             newPersona.setEmail(personaUsuarioRequest.getEmail());
+            newPersona.setDireccion(personaUsuarioRequest.getDireccion());
+            newPersona.setFechaNacimiento(personaUsuarioRequest.getFechaNacimiento());
             if (!getPersona(personaUsuarioRequest.getCedula())) {
                 Persona persona = personaRepository.save(newPersona);
                 if (persona != null) {
-                    guardarUsuario(persona.getCedula(), personaUsuarioRequest.getClave(), personaUsuarioRequest.getIdRol());
+                    guardarUsuario(persona.getCedula(), personaUsuarioRequest.getClave(), personaUsuarioRequest.getIdRol() , personaUsuarioRequest.getIdSucursal());
                     Optional<Usuario> user = usuarioRepository.findByPersona(persona);
                     return new PersonaUsuarioResponse(persona.getId(), persona.getCedula(),
                             persona.getApellidos(), persona.getNombres(), persona.getEmail(),
-                             persona.getTelefono(), user.get().getClave(), user.get().getRoles().getId(),generateTokenSignUp(personaUsuarioRequest));
+                             persona.getTelefono(), user.get().getClave(), persona.getDireccion() , persona.getFechaNacimiento(), user.get().getRoles().getId(), user.get().getSucursal().getId(),generateTokenSignUp(personaUsuarioRequest));
 
                 }else {
                     log.error("No se puedo guardar el usuario con cédula: {} e email: {}", personaUsuarioRequest.getCedula(), personaUsuarioRequest.getEmail());
@@ -95,10 +100,12 @@ public class PersonaService implements UserDetailsService {
             optionalPersona.get().setNombres(personaUsuarioRequest.getNombres());
             optionalPersona.get().setTelefono(personaUsuarioRequest.getTelefono());
             optionalPersona.get().setEmail( personaUsuarioRequest.getEmail());
+            optionalPersona.get().setDireccion(personaUsuarioRequest.getDireccion());
+            optionalPersona.get().setFechaNacimiento(personaUsuarioRequest.getFechaNacimiento());
             try{
                 Persona persona = personaRepository.save(optionalPersona.get());
                 if(persona != null){
-                   actualizarUsuario(persona, personaUsuarioRequest.getClave(), personaUsuarioRequest.getIdRol());
+                   actualizarUsuario(persona, personaUsuarioRequest.getClave(), personaUsuarioRequest.getIdRol() ,personaUsuarioRequest.getIdSucursal());
 
                 }else {
                     throw new BadRequestException("No se actualizó la persona");
@@ -111,22 +118,35 @@ public class PersonaService implements UserDetailsService {
         }
         return false;
     }
-    private boolean guardarUsuario(String cedula,String clave,Long idRol){
+    private boolean guardarUsuario(String cedula,String clave,Long idRol , Long idSucursal){
         Optional<Persona> optionalPersona = personaRepository.findByCedula(cedula);
         if(optionalPersona.isPresent()){
+
             Optional<Roles> optionalRoles= rolesRepository.findById(idRol);
             if(optionalRoles.isPresent()){
-            Persona persona = optionalPersona.get();
-            Usuario newUsuario = new Usuario();
-            newUsuario.setClave(clave);
-            newUsuario.setPersona(persona);
-            newUsuario.setRoles(optionalRoles.get());
-            Usuario user = usuarioRepository.save(newUsuario);
-            if(user!=null){
-                return true;
-            }else{
-                throw new BadRequestException("Usuario no registrado");
-            }
+
+                Optional<Sucursal> optionalSucursal = sucursalRepository.findById(idSucursal);
+                if (optionalSucursal.isPresent()){
+
+                    Persona persona = optionalPersona.get();
+                    Usuario newUsuario = new Usuario();
+                    newUsuario.setClave(clave);
+                    newUsuario.setPersona(persona);
+                    newUsuario.setRoles(optionalRoles.get());
+                    newUsuario.setSucursal(optionalSucursal.get());
+
+                    Usuario user = usuarioRepository.save(newUsuario);
+                    if(user!=null){
+                        return true;
+                    }else{
+                        throw new BadRequestException("Usuario no registrado");
+                    }
+
+                }else{
+                    throw new BadRequestException("La sucursal seleccionado no existe");
+                }
+
+
 
             }else{
                 throw new BadRequestException("El rol seleccionado no existe");
@@ -136,22 +156,31 @@ public class PersonaService implements UserDetailsService {
             throw new BadRequestException("La cedula ingresada, no está registrada");
         }
     }
-    private boolean actualizarUsuario(Persona persona, String clave,Long idRol){
+    private boolean actualizarUsuario(Persona persona, String clave,Long idRol , Long idSucursal){
         Optional<Usuario> optionalUsuario = usuarioRepository.findByPersona(persona);
         if(optionalUsuario.isPresent()){
             Optional<Roles> optionalRoles= rolesRepository.findById(idRol);
             if(optionalRoles.isPresent()){
 
-                optionalUsuario.get().setClave(clave);
-                optionalUsuario.get().setPersona(persona);
-                optionalUsuario.get().setRoles(optionalRoles.get());
+                Optional<Sucursal> optionalSucursales = sucursalRepository.findById(idSucursal);
 
-                try{
-                    Usuario usuario = usuarioRepository.save(optionalUsuario.get());
-                    return true;
-                }catch (Exception ex) {
-                    throw new BadRequestException("No se actualizó tbl_usuario" + ex);
+                if(optionalSucursales.isPresent()){
+                    optionalUsuario.get().setClave(clave);
+                    optionalUsuario.get().setPersona(persona);
+                    optionalUsuario.get().setRoles(optionalRoles.get());
+                    //optionalUsuario.get().setSucursal(optionalSucursales.get());
+                    try{
+                        Usuario usuario = usuarioRepository.save(optionalUsuario.get());
+                        return true;
+                    }catch (Exception ex) {
+                        throw new BadRequestException("No se actualizó tbl_usuario" + ex);
+                    }
+                }else{
+                    throw new BadRequestException("Sucursal seleccionado no existe");
                 }
+
+
+
             }else{
                 throw new BadRequestException("El rol seleccionado no existe");
             }
@@ -180,6 +209,9 @@ public class PersonaService implements UserDetailsService {
             pcr.setTelefono(usuarioRequest.getPersona().getTelefono());
             pcr.setEmail(usuarioRequest.getPersona().getEmail());
             pcr.setIdRol(usuarioRequest.getRoles().getId());
+            pcr.setIdSucursal(usuarioRequest.getSucursal().getId());
+            pcr.setFechaNacimiento(usuarioRequest.getPersona().getFechaNacimiento());
+            pcr.setDireccion(usuarioRequest.getPersona().getDireccion());
 
             return pcr;
         }).collect(Collectors.toList());
@@ -199,6 +231,10 @@ public class PersonaService implements UserDetailsService {
                 response.setTelefono(user.get().getPersona().getTelefono());
                 response.setEmail(user.get().getPersona().getEmail());
                 response.setIdRol(user.get().getRoles().getId());
+                response.setFechaNacimiento(user.get().getPersona().getFechaNacimiento());
+                response.setDireccion(user.get().getPersona().getDireccion());
+                response.setIdSucursal(user.get().getSucursal().getId());
+
                 return response;
             }else{
                 throw new BadRequestException("No existe un persona con cédula" +cedula);
@@ -277,17 +313,19 @@ public class PersonaService implements UserDetailsService {
             newPersona.setNombres(personaClienteRequest.getNombres());
             newPersona.setTelefono(personaClienteRequest.getTelefono());
             newPersona.setEmail(personaClienteRequest.getEmail());
+            newPersona.setDireccion(personaClienteRequest.getDireccion());
+            newPersona.setFechaNacimiento(personaClienteRequest.getFechaNacimiento());
             if (!getPersona(personaClienteRequest.getCedula())) {
                 Persona persona = personaRepository.save(newPersona);
                 if (persona != null) {
 
-                    guardarCliente(persona.getCedula(),personaClienteRequest.getUbicacion(),personaClienteRequest.getFechaNacimiento());
+                    guardarCliente(persona.getCedula());
 
 
                     Optional<Cliente> cliente = clienteRepository.findByPersona(persona);
                     return new PersonaClienteResponse(persona.getId(), persona.getCedula(),
                             persona.getApellidos(), persona.getNombres(), persona.getEmail(),
-                            persona.getTelefono(), cliente.get().getUbicacion(), cliente.get().getFechaNacimiento());
+                            persona.getTelefono(), persona.getDireccion(), persona.getFechaNacimiento());
 
                 }else {
                     log.error("No se puedo guardar el cliente con cédula: {} e email: {}", personaClienteRequest.getCedula(), personaClienteRequest.getEmail());
@@ -302,15 +340,13 @@ public class PersonaService implements UserDetailsService {
         }
     }
 
-    private boolean guardarCliente(String cedula,String ubicacion,Date fechaNacimiento){
+    private boolean guardarCliente(String cedula){
 
         Optional<Persona> optionalPersona = personaRepository.findByCedula(cedula);
         if(optionalPersona.isPresent()){
                 Persona persona = optionalPersona.get();
                 Cliente newCliente = new Cliente();
-                newCliente.setUbicacion(ubicacion);
                 newCliente.setPersona(persona);
-                newCliente.setFechaNacimiento(fechaNacimiento);
                 Cliente cliente = clienteRepository.save(newCliente);
 
                 if(cliente!=null){

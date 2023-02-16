@@ -1,4 +1,4 @@
-package com.Biblioteca.Repository.Persona;
+package com.Biblioteca.Models.Persona;
 
 import com.Biblioteca.Models.Persona.Persona;
 import org.springframework.data.jpa.repository.JpaRepository;

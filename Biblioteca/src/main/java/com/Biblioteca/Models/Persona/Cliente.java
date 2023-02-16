@@ -21,12 +21,6 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ubicacion;
-
-    @Column(name = "fecha_nacimiento")
-    @Temporal(TemporalType.DATE)
-    private Date fechaNacimiento;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="persona_id", referencedColumnName = "id")
     private Persona persona;

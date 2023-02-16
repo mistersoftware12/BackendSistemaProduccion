@@ -3,6 +3,7 @@ package com.Biblioteca.DTO.Persona;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 public class PersonaUsuarioRequest implements Serializable {
@@ -19,10 +20,15 @@ public class PersonaUsuarioRequest implements Serializable {
 
     private String telefono;
 
+    private String direccion;
+
+    private Date fechaNacimiento;
+
     private String clave;
 
     private Long idRol;
 
+    private Long idSucursal;
 
 
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Table(name = "persona")
 @Entity
@@ -28,6 +29,12 @@ public class Persona implements Serializable {
     private String email;
 
     private String telefono;
+
+    private String direccion;
+
+    @Column(name = "fecha_nacimiento")
+    @Temporal(TemporalType.DATE)
+    private Date fechaNacimiento;
 
 
     @OneToOne(mappedBy = "persona")

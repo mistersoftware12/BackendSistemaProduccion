@@ -20,19 +20,19 @@ public class PersonaClienteResponse implements Serializable {
 
     private String telefono;
 
-    private String ubicacion;
+    private String direccion;
 
     private Date fechaNacimiento;
 
 
-    public PersonaClienteResponse(Long id, String cedula, String apellidos, String nombres, String email, String telefono, String ubicacion, Date fechaNacimiento) {
+    public PersonaClienteResponse(Long id, String cedula, String apellidos, String nombres, String email, String telefono, String direccion, Date fechaNacimiento) {
         this.id = id;
         this.cedula = cedula;
         this.apellidos = apellidos;
         this.nombres = nombres;
         this.email = email;
         this.telefono = telefono;
-        this.ubicacion = ubicacion;
+        this.direccion = direccion;
         this.fechaNacimiento = fechaNacimiento;
     }
 
