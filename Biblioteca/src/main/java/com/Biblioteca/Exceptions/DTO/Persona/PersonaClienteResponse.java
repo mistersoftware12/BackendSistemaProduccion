@@ -25,6 +25,7 @@ public class PersonaClienteResponse implements Serializable {
     private Date fechaNacimiento;
 
 
+
     public PersonaClienteResponse(Long id, String cedula, String apellidos, String nombres, String email, String telefono, String direccion, Date fechaNacimiento) {
         this.id = id;
         this.cedula = cedula;
@@ -38,4 +39,6 @@ public class PersonaClienteResponse implements Serializable {
 
     public PersonaClienteResponse() {
     }
+
+
 }

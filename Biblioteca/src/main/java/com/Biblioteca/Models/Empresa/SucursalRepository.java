@@ -1,4 +1,4 @@
-package com.Biblioteca.Repository.Empresa;
+package com.Biblioteca.Models.Empresa;
 
 import com.Biblioteca.Models.Empresa.Sucursal;
 import org.springframework.data.jpa.repository.JpaRepository;

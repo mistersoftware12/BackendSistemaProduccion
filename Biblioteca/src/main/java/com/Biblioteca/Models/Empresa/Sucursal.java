@@ -4,6 +4,7 @@ import com.Biblioteca.Models.Empresa.Sucursales.Almacen;
 import com.Biblioteca.Models.Empresa.Sucursales.AlmacenBodegaTaller;
 import com.Biblioteca.Models.Empresa.Sucursales.Bodega;
 import com.Biblioteca.Models.Empresa.Sucursales.Taller;
+import com.Biblioteca.Models.Persona.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,19 +29,10 @@ public class Sucursal  implements Serializable {
 
     private String nombre;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="almacen_id", referencedColumnName = "id")
-    private Almacen almacen;
+    private  String logo;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="bodega_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "sucursal")
     private Bodega bodega;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="taller_id", referencedColumnName = "id")
-    private Taller taller;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="sucursal_id", referencedColumnName = "id")
-    private Sucursal sucursal;
 }
+
+
