@@ -1,4 +1,4 @@
-package com.Biblioteca.DTO.fecha;
+package com.Biblioteca.Exceptions.DTO.fecha;
 
 import lombok.Data;
 

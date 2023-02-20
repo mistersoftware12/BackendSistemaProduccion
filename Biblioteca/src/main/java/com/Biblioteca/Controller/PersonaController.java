@@ -1,7 +1,7 @@
 package com.Biblioteca.Controller;
 
 
-import com.Biblioteca.DTO.Persona.*;
+import com.Biblioteca.Exceptions.DTO.Persona.*;
 import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,17 @@ public class PersonaController {
     private PersonaService personaService;
 
 
-
     @PutMapping("/updateUsuario")
     public ResponseEntity<?> updateUsuario(@RequestBody PersonaUsuarioRequest request) {
         personaService.updateUsuario(request);
         return new ResponseEntity(new Mensaje("Usuario Actualizado"), HttpStatus.OK);
+    }
+
+
+    @PutMapping("/updateCliente")
+    public ResponseEntity<?> updateCliente(@RequestBody PersonaClienteRequest request) {
+        personaService.updateCliente(request);
+        return new ResponseEntity(new Mensaje("Cliente Actualizado"), HttpStatus.OK);
     }
 
     @PostMapping("/registroUsuario")
@@ -43,6 +49,15 @@ public class PersonaController {
         List<PersonaUsuarioResponse> users = personaService.listAllUsuarios();
         return new ResponseEntity<List<PersonaUsuarioResponse>>(users, HttpStatus.OK);
     }
+
+    @GetMapping("/allClientes")
+    public ResponseEntity<List<PersonaClienteResponse>> listAllCliestes() {
+        List<PersonaClienteResponse> cliente = personaService.listAllClientes();
+        return  new ResponseEntity<List<PersonaClienteResponse>>(cliente , HttpStatus.OK);
+
+
+    }
+
 
     @GetMapping("/usuario/{cedula}")
     public ResponseEntity<PersonaUsuarioResponse> listUsuarioByCedula(@PathVariable String cedula){
@@ -64,8 +79,10 @@ public class PersonaController {
         PersonaClienteResponse personaResponse = personaService.registrarCliente(personaRequest);
 
         if (personaResponse == null) {
+
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+
         return new ResponseEntity<>(personaResponse, HttpStatus.CREATED);
     }
 
