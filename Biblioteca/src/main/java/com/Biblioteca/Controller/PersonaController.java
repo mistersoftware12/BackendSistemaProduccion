@@ -1,7 +1,7 @@
 package com.Biblioteca.Controller;
 
 
-import com.Biblioteca.Exceptions.DTO.Persona.*;
+import com.Biblioteca.DTO.Persona.*;
 import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;

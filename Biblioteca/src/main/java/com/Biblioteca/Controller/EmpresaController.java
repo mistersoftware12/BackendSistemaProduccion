@@ -1,13 +1,11 @@
 package com.Biblioteca.Controller;
 
-import com.Biblioteca.Exceptions.DTO.Persona.PersonaUsuarioResponse;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.AlmacenRequest;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.AlmacenResponse;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.SucursalRequest;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.SucursalResponse;
+import com.Biblioteca.DTO.empresa.sucursales.*;
 import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.Empresa.AlmacenService;
+import com.Biblioteca.Service.Empresa.BodegaService;
 import com.Biblioteca.Service.Empresa.SucursalService;
+import com.Biblioteca.Service.Empresa.TallerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +25,11 @@ public class EmpresaController {
 @Autowired
     SucursalService sucursalService;
 
+@Autowired
+    BodegaService bodegaService;
+
+@Autowired
+    TallerService tallerService;
 
     @PostMapping("/registrarAlmacen")
     public ResponseEntity<?> registroAlmacen(@RequestBody AlmacenRequest request){
@@ -38,17 +41,40 @@ public class EmpresaController {
         return new ResponseEntity<>(sucursalService.regitrarSucursal(request), HttpStatus.OK);
     }
 
+    @PostMapping("/registrarBodega")
+    public ResponseEntity<?> registroBodega(@RequestBody BodegaRequest request){
+        return new ResponseEntity<>( bodegaService.registrarBodega(request), HttpStatus.OK);
+    }
+
+    @PostMapping("/registrarTaller")
+    public ResponseEntity<?> registroTaller(@RequestBody  TallerRequest request ){
+        return new ResponseEntity<>( tallerService.registrarTaller(request), HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/allSucursal")
     public ResponseEntity<List<SucursalResponse>> allSucursal(){
-        List<SucursalResponse> allBarrios = sucursalService.listAllSucursal();
-        return new ResponseEntity<>(allBarrios, HttpStatus.OK);
+        List<SucursalResponse> allSucursal = sucursalService.listAllSucursal();
+        return new ResponseEntity<>(allSucursal, HttpStatus.OK);
     }
 
     @GetMapping("/allAlmacen")
     public ResponseEntity<List<AlmacenResponse>> listAllAlmacen() {
         List<AlmacenResponse> allAlmacenes = almacenService.listAllAlmacen();
         return new ResponseEntity<List<AlmacenResponse>>(allAlmacenes, HttpStatus.OK);
+    }
+
+    @GetMapping("/allBodega")
+    public  ResponseEntity<List<BodegaResponse>> listAllBodega(){
+        List<BodegaResponse> allBodegas = bodegaService.listAllBodega();
+      return new ResponseEntity<List<BodegaResponse>>(allBodegas, HttpStatus.OK);
+    }
+
+    @GetMapping("/allTaller")
+    public  ResponseEntity<List<TallerResponse>> listAllTaller(){
+        List<TallerResponse> allTalleres = tallerService.listAllTaller();
+        return new ResponseEntity<List<TallerResponse>>(allTalleres, HttpStatus.OK);
     }
 
 
@@ -63,6 +89,19 @@ public class EmpresaController {
     public ResponseEntity<?> updateAlmacen(@RequestBody AlmacenRequest almacenRequest ) {
         almacenService.actualizarAlmacenconid(almacenRequest);
         return new ResponseEntity(new Mensaje("Almacen Actualizado"), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateBodega")
+    public ResponseEntity<?> updateBodega(@RequestBody BodegaRequest bodegaRequest ) {
+        bodegaService.actualizarBodegaconid(bodegaRequest);
+
+        return new ResponseEntity(new Mensaje("Bodega Actualizado"), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateTaller")
+    public ResponseEntity<?> updateTaller(@RequestBody TallerRequest tallerRequest ) {
+        tallerService.actualizarTallerconid(tallerRequest);
+        return new ResponseEntity(new Mensaje("Taller Actualizado"), HttpStatus.OK);
     }
 
 }

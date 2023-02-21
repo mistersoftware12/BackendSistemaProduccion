@@ -1,8 +1,8 @@
 package com.Biblioteca.Service.Empresa;
 
 import com.Biblioteca.Exceptions.BadRequestException;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.SucursalRequest;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.SucursalResponse;
+import com.Biblioteca.DTO.empresa.sucursales.SucursalRequest;
+import com.Biblioteca.DTO.empresa.sucursales.SucursalResponse;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Empresa.SucursalRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -1,16 +1,15 @@
-package com.Biblioteca.Exceptions.DTO.empresa.sucursales;
+package com.Biblioteca.DTO.empresa.sucursales;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class AlmacenResponse implements Serializable {
-
+public class TallerResponse implements Serializable {
 
     private  Long id;
 
-    private Long idAlmacen;
+    private Long idTaller;
 
     private String nombre;
 
@@ -28,9 +27,9 @@ public class AlmacenResponse implements Serializable {
 
     private String nombreSucursal;
 
-    public AlmacenResponse(Long id, Long idAlmacen, String nombre, String direccion, String telefono, String correo, String responsable, Boolean estado, Long idSucursal) {
+    public TallerResponse(Long id, Long idTaller, String nombre, String direccion, String telefono, String correo, String responsable, Boolean estado, Long idSucursal) {
         this.id = id;
-        this.idAlmacen = idAlmacen;
+        this.idTaller = idTaller;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
@@ -40,8 +39,6 @@ public class AlmacenResponse implements Serializable {
         this.idSucursal = idSucursal;
     }
 
-    public AlmacenResponse() {
+    public TallerResponse() {
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.Biblioteca.Exceptions.DTO.Persona;
+package com.Biblioteca.DTO.Persona;
 
 import lombok.Data;
 

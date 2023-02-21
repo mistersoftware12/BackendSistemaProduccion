@@ -1,7 +1,7 @@
 package com.Biblioteca.Service;
 
+import com.Biblioteca.DTO.Persona.*;
 import com.Biblioteca.Exceptions.BadRequestException;
-import com.Biblioteca.Exceptions.DTO.Persona.*;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Persona.Cliente;
 import com.Biblioteca.Models.Persona.Persona;

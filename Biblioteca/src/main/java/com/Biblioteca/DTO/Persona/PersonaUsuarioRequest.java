@@ -1,4 +1,4 @@
-package com.Biblioteca.Exceptions.DTO.Persona;
+package com.Biblioteca.DTO.Persona;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class PersonaClienteRequest implements Serializable {
+public class PersonaUsuarioRequest implements Serializable {
 
     private Long id;
 
@@ -24,6 +24,11 @@ public class PersonaClienteRequest implements Serializable {
 
     private Date fechaNacimiento;
 
+    private String clave;
+
+    private Long idRol;
+
+    private Long idSucursal;
 
 
 }

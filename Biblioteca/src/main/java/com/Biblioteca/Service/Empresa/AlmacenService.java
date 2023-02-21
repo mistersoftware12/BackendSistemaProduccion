@@ -1,29 +1,19 @@
 package com.Biblioteca.Service.Empresa;
 
 import com.Biblioteca.Exceptions.BadRequestException;
-import com.Biblioteca.Exceptions.DTO.Persona.PersonaClienteRequest;
-import com.Biblioteca.Exceptions.DTO.Persona.PersonaClienteResponse;
-import com.Biblioteca.Exceptions.DTO.Persona.PersonaUsuarioResponse;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.AlmacenRequest;
-import com.Biblioteca.Exceptions.DTO.empresa.sucursales.AlmacenResponse;
+import com.Biblioteca.DTO.empresa.sucursales.AlmacenRequest;
+import com.Biblioteca.DTO.empresa.sucursales.AlmacenResponse;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Empresa.SucursalRepository;
 import com.Biblioteca.Models.Empresa.Sucursales.Almacen;
 import com.Biblioteca.Models.Empresa.Sucursales.AlmacenBodegaTaller;
-import com.Biblioteca.Models.Persona.Cliente;
-import com.Biblioteca.Models.Persona.Persona;
-import com.Biblioteca.Models.Persona.Usuario;
-import com.Biblioteca.Models.Roles.Roles;
 import com.Biblioteca.Repository.Empresa.AlmacenBodegaTallerRepository;
 import com.Biblioteca.Repository.Empresa.AlmacenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
-import java.math.BigInteger;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,7 +64,7 @@ public class AlmacenService {
              newAlmBoTaller.setCorreo(almacenRequest.getCorreo());
              newAlmBoTaller.setResponsable(almacenRequest.getResponsable());
              newAlmBoTaller.setEstado(almacenRequest.getEstado());
-             //newAlmBoTaller.seti(almacenRequest.getIdAlmacen());
+
 
            AlmacenBodegaTaller almacenBodegaTaller = almacenBodegaTallerRepository.save(newAlmBoTaller);
 
@@ -83,9 +73,7 @@ public class AlmacenService {
 
                 guardarAlmacen(almacenBodegaTaller.getId(), (almacenRequest.getIdSucursal()));
 
-                //Optional<Almacen> almacen = almacenRepository.findByAlmacenRegistro(almacenBodegaTaller);
 
-                //return  new AlmacenResponse(almacenBodegaTaller.getId() , almacen.get().getId() , almacenBodegaTaller.getNombre(),almacenBodegaTaller.getDireccion(),almacenBodegaTaller.getTelefono(),almacenBodegaTaller.getCorreo(),almacenBodegaTaller.getResponsable() , almacenBodegaTaller.getEstado(),almacen.get().getId());
 return  new AlmacenResponse();
 
             } else {
@@ -93,7 +81,7 @@ return  new AlmacenResponse();
             }
 
         } else {
-            throw new BadRequestException("ya registrado un almacen con el mismo nombre ");
+            throw new BadRequestException("Ya registrado un almacen con el mismo nombre: " +almacenRequest.getNombre());
         }
 
 
@@ -156,7 +144,7 @@ return  new AlmacenResponse();
                     if (c != null) {
                         guardaractualizacionalmacen(c.getAlmacenBodegaTaller().getId(),almacenRequest.getNombre() ,  almacenRequest.getDireccion() ,almacenRequest.getTelefono(), almacenRequest.getCorreo(), almacenRequest.getResponsable() ,almacenRequest.getEstado());
                     } else {
-                        throw new BadRequestException("NO SE ACTUALIZO EL TALLER");
+                        throw new BadRequestException("NO SE ACTUALIZO EL ALMACEN");
                     }
                 } catch (Exception ex) {
                     throw new BadRequestException("No ACTUALIZADO" + ex);
@@ -179,7 +167,6 @@ return  new AlmacenResponse();
 
         Optional<AlmacenBodegaTaller> optionalc = almacenBodegaTallerRepository.findById(idAlmacenBodegaTaller);
 
-       // Optional<CursoTaller> optionalc = cursotallerRepository.findById(idCursotaller);
         if (optionalc.isPresent()) {
             optionalc.get().setNombre(nombre);
             optionalc.get().setDireccion(direccion);

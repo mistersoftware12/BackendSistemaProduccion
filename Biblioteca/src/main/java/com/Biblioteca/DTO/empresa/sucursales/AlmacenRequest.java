@@ -1,4 +1,4 @@
-package com.Biblioteca.Exceptions.DTO.empresa.sucursales;
+package com.Biblioteca.DTO.empresa.sucursales;
 
 import lombok.Data;
 
