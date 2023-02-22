@@ -28,7 +28,11 @@ public class PersonaUsuarioRequest implements Serializable {
 
     private Long idRol;
 
+    private String nombreRol;
+
     private Long idSucursal;
+
+    private String nombreSucursal;
 
 
 }

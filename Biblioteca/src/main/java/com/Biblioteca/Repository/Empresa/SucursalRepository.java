@@ -1,4 +1,4 @@
-package com.Biblioteca.Models.Empresa;
+package com.Biblioteca.Repository.Empresa;
 
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Persona.Cliente;

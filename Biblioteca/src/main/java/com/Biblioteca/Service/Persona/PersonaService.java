@@ -1,4 +1,4 @@
-package com.Biblioteca.Service;
+package com.Biblioteca.Service.Persona;
 
 import com.Biblioteca.DTO.Persona.*;
 import com.Biblioteca.Exceptions.BadRequestException;
@@ -11,7 +11,7 @@ import com.Biblioteca.Models.Roles.Roles;
 import com.Biblioteca.Repository.Persona.ClienteRepository;
 import com.Biblioteca.Repository.Persona.PersonaRepository;
 import com.Biblioteca.Repository.Persona.UsuarioRepository;
-import com.Biblioteca.Models.Empresa.SucursalRepository;
+import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Repository.RolesRepository;
 
 import com.Biblioteca.Security.jwt.JwtUtil;
@@ -209,9 +209,12 @@ public class PersonaService implements UserDetailsService {
             pcr.setTelefono(usuarioRequest.getPersona().getTelefono());
             pcr.setEmail(usuarioRequest.getPersona().getEmail());
             pcr.setIdRol(usuarioRequest.getRoles().getId());
+            pcr.setNombreRol(usuarioRequest.getRoles().getDescripcion());
             pcr.setIdSucursal(usuarioRequest.getSucursal().getId());
+            pcr.setNombreSucursal(usuarioRequest.getSucursal().getNombre());
             pcr.setFechaNacimiento(usuarioRequest.getPersona().getFechaNacimiento());
             pcr.setDireccion(usuarioRequest.getPersona().getDireccion());
+
 
             return pcr;
         }).collect(Collectors.toList());

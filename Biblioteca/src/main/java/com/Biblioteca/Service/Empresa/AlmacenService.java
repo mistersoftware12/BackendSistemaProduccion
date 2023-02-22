@@ -4,7 +4,7 @@ import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.DTO.empresa.sucursales.AlmacenRequest;
 import com.Biblioteca.DTO.empresa.sucursales.AlmacenResponse;
 import com.Biblioteca.Models.Empresa.Sucursal;
-import com.Biblioteca.Models.Empresa.SucursalRepository;
+import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Models.Empresa.Sucursales.Almacen;
 import com.Biblioteca.Models.Empresa.Sucursales.AlmacenBodegaTaller;
 import com.Biblioteca.Repository.Empresa.AlmacenBodegaTallerRepository;

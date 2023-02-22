@@ -4,7 +4,7 @@ import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.DTO.empresa.sucursales.SucursalRequest;
 import com.Biblioteca.DTO.empresa.sucursales.SucursalResponse;
 import com.Biblioteca.Models.Empresa.Sucursal;
-import com.Biblioteca.Models.Empresa.SucursalRepository;
+import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +51,7 @@ public class SucursalService {
             response.setId(sucursalRequest.getId());
             response.setNombre(sucursalRequest.getNombre());
             response.setLogo(sucursalRequest.getLogo());
+
 
             return response;
         }).collect(Collectors.toList());

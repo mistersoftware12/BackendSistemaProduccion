@@ -29,8 +29,10 @@ public class PersonaUsuarioResponse implements Serializable {
 
     private Long idRol;
 
-
+    private String nombreRol;
     private Long idSucursal;
+
+    private String nombreSucursal;
 
     private String token;
 

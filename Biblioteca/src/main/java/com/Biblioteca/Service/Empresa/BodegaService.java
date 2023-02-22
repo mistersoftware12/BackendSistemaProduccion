@@ -5,7 +5,7 @@ import com.Biblioteca.DTO.empresa.sucursales.AlmacenResponse;
 import com.Biblioteca.DTO.empresa.sucursales.BodegaRequest;
 import com.Biblioteca.DTO.empresa.sucursales.BodegaResponse;
 import com.Biblioteca.Models.Empresa.Sucursal;
-import com.Biblioteca.Models.Empresa.SucursalRepository;
+import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Models.Empresa.Sucursales.AlmacenBodegaTaller;
 import com.Biblioteca.Models.Empresa.Sucursales.Bodega;
 import com.Biblioteca.Repository.Empresa.AlmacenBodegaTallerRepository;
