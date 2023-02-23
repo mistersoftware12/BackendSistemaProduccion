@@ -1,4 +1,4 @@
-package com.Biblioteca.DTO.Catalogo;
+package com.Biblioteca.Repository.DTO.Catalogo;
 
 import lombok.Data;
 
@@ -9,6 +9,6 @@ public class CatalogoRequest implements Serializable {
 
     private Long id;
     private String nombre;
-    private String inicialCodigo;
+    private  Boolean estado;
 
 }

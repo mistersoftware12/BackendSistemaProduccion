@@ -1,4 +1,4 @@
-package com.Biblioteca.DTO.empresa.sucursales;
+package com.Biblioteca.Repository.DTO.empresa.sucursales;
 
 import lombok.Data;
 
@@ -27,5 +27,7 @@ public class AlmacenRequest implements Serializable {
     private Long idSucursal;
 
     private String nombreSucursal;
+
+    private String nombreEstado;
 
 }

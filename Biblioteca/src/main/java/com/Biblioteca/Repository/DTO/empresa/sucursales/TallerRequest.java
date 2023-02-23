@@ -1,14 +1,14 @@
-package com.Biblioteca.DTO.empresa.sucursales;
+package com.Biblioteca.Repository.DTO.empresa.sucursales;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class BodegaRequest implements Serializable {
+public class TallerRequest implements Serializable {
     private  Long id;
 
-    private Long idBodega;
+    private Long idTaller;
 
     private String nombre;
 
@@ -25,4 +25,6 @@ public class BodegaRequest implements Serializable {
     private Long idSucursal;
 
     private String nombreSucursal;
+
+    private String nombreEstado;
 }

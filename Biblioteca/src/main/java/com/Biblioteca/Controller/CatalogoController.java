@@ -1,12 +1,9 @@
 package com.Biblioteca.Controller;
 
-import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
-import com.Biblioteca.DTO.Catalogo.CatalogoResponse;
-import com.Biblioteca.DTO.Categoria.CategoriaRequest;
-import com.Biblioteca.DTO.Categoria.CategoriaResponse;
+import com.Biblioteca.Repository.DTO.Catalogo.CatalogoRequest;
+import com.Biblioteca.Repository.DTO.Catalogo.CatalogoResponse;
 import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.Catalogo.CatalogoService;
-import com.Biblioteca.Service.Categoria.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

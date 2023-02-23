@@ -1,7 +1,7 @@
 package com.Biblioteca.Service.Categoria;
 
-import com.Biblioteca.DTO.Categoria.CategoriaRequest;
-import com.Biblioteca.DTO.Categoria.CategoriaResponse;
+import com.Biblioteca.Repository.DTO.Categoria.CategoriaRequest;
+import com.Biblioteca.Repository.DTO.Categoria.CategoriaResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Categoria.Categoria;
 import com.Biblioteca.Repository.Categoria.CategoriaRepository;
@@ -27,18 +27,25 @@ public class CategoriaService {
 
     public boolean regitrarCategoria (CategoriaRequest categoriaRequest  ){
 
-        Categoria newCategoria = new Categoria();
+        if(!getNombre(categoriaRequest.getNombre())){
+            Categoria newCategoria = new Categoria();
 
 
-        newCategoria.setNombre(categoriaRequest.getNombre());
-        newCategoria.setInicialCodigo(categoriaRequest.getInicialCodigo());
+            newCategoria.setNombre(categoriaRequest.getNombre());
+            newCategoria.setEstado(categoriaRequest.getEstado());
+            newCategoria.setInicialCodigo(categoriaRequest.getInicialCodigo());
 
-        try {
-            categoriaRepository.save(newCategoria);
-            return true;
-        }catch (Exception e){
-            throw new BadRequestException("No se registró la categoria" +e);
+            try {
+                categoriaRepository.save(newCategoria);
+                return true;
+            }catch (Exception e){
+                throw new BadRequestException("No se registró la categoria" +e);
+            }
+        }else{
+            throw new BadRequestException("Ya existe una categoria con ese nombre");
         }
+
+
 
     }
 
@@ -51,7 +58,16 @@ public class CategoriaService {
 
             response.setId(categoriaRequest.getId());
             response.setNombre(categoriaRequest.getNombre());
+            response.setEstado(categoriaRequest.getEstado());
             response.setInicialCodigo(categoriaRequest.getInicialCodigo());
+
+            if(categoriaRequest.getEstado() == true){
+                response.setNombreEstado("Activo");
+            }
+
+            if(categoriaRequest.getEstado()==false){
+                response.setNombreEstado("Inactivo");
+            }
 
             return response;
         }).collect(Collectors.toList());
@@ -64,6 +80,7 @@ public class CategoriaService {
 
         if(categoria.isPresent()){
             categoria.get().setNombre( categoriaRequest.getNombre());
+            categoria.get().setEstado(categoriaRequest.getEstado());
             categoria.get().setInicialCodigo(categoriaRequest.getInicialCodigo());
 
             try{
@@ -77,4 +94,7 @@ public class CategoriaService {
         }
     }
 
+    private boolean getNombre(String nombre) {
+        return  categoriaRepository.existsByNombre(nombre);
+    }
 }

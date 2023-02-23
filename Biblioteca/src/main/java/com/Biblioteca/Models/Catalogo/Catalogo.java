@@ -24,8 +24,7 @@ public class Catalogo implements Serializable {
 
     private String nombre;
 
-    @Column(name = "incial_codigo")
-    private  String inicialCodigo;
+    private  Boolean estado;
 
 
 }

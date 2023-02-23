@@ -1,4 +1,4 @@
-package com.Biblioteca.DTO.Categoria;
+package com.Biblioteca.Repository.DTO.Categoria;
 
 import lombok.Data;
 
@@ -10,5 +10,9 @@ public class CategoriaRequest implements Serializable {
     private Long id;
     private String nombre;
     private  String inicialCodigo;
+
+    private  Boolean estado;
+
+    private String nombreEstado;
 
 }

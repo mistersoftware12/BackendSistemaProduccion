@@ -1,8 +1,10 @@
 package com.Biblioteca.Service.Empresa;
 
-import com.Biblioteca.DTO.empresa.sucursales.*;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Empresa.Sucursal;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.AlmacenResponse;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.TallerRequest;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.TallerResponse;
 import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Models.Empresa.Sucursales.AlmacenBodegaTaller;
 import com.Biblioteca.Models.Empresa.Sucursales.Taller;
@@ -49,6 +51,15 @@ public class TallerService {
             pcr.setEstado(tallerRequest.getAlmacenBodegaTaller().getEstado());
             pcr.setIdSucursal(tallerRequest.getSucursal().getId());
             pcr.setNombreSucursal(tallerRequest.getSucursal().getNombre());
+
+            if(tallerRequest.getAlmacenBodegaTaller().getEstado() == true){
+                pcr.setNombreEstado("Activo");
+            }
+
+            if(tallerRequest.getAlmacenBodegaTaller().getEstado() == false){
+                pcr.setNombreEstado("Inactivo");
+            }
+
 
             return pcr;
         }).collect(Collectors.toList());

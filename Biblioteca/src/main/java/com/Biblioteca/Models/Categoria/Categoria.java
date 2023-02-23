@@ -27,7 +27,7 @@ public class Categoria implements Serializable {
     @Column(name = "incial_codigo")
     private  String inicialCodigo;
 
-
+    private  Boolean estado;
 }
 
 

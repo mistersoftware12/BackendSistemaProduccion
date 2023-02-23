@@ -1,8 +1,8 @@
 package com.Biblioteca.Service.Empresa;
 
 import com.Biblioteca.Exceptions.BadRequestException;
-import com.Biblioteca.DTO.empresa.sucursales.AlmacenRequest;
-import com.Biblioteca.DTO.empresa.sucursales.AlmacenResponse;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.AlmacenRequest;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.AlmacenResponse;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Models.Empresa.Sucursales.Almacen;
@@ -47,6 +47,14 @@ public class AlmacenService {
             pcr.setEstado(almacenRequest.getAlmacenBodegaTaller().getEstado());
             pcr.setIdSucursal(almacenRequest.getSucursal().getId());
             pcr.setNombreSucursal(almacenRequest.getSucursal().getNombre());
+
+            if(almacenRequest.getAlmacenBodegaTaller().getEstado() == true){
+                pcr.setNombreEstado("Activo");
+            }
+
+            if(almacenRequest.getAlmacenBodegaTaller().getEstado() == false){
+                pcr.setNombreEstado("Inactivo");
+            }
 
             return pcr;
         }).collect(Collectors.toList());

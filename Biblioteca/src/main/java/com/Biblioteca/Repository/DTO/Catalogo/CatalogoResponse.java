@@ -1,4 +1,4 @@
-package com.Biblioteca.DTO.Catalogo;
+package com.Biblioteca.Repository.DTO.Catalogo;
 
 import lombok.Data;
 
@@ -9,12 +9,12 @@ public class CatalogoResponse implements Serializable {
 
     private Long id;
     private String nombre;
-    private String inicialCodigo;
+    private  Boolean estado;
 
-    public CatalogoResponse(Long id, String nombre, String inicialCodigo) {
+    public CatalogoResponse(Long id, String nombre,  Boolean estado) {
         this.id = id;
         this.nombre = nombre;
-        this.inicialCodigo = inicialCodigo;
+        this.estado = estado;
     }
 
     public CatalogoResponse() {

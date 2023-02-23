@@ -1,7 +1,7 @@
 package com.Biblioteca.Service.Catalogo;
 
-import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
-import com.Biblioteca.DTO.Catalogo.CatalogoResponse;
+import com.Biblioteca.Repository.DTO.Catalogo.CatalogoRequest;
+import com.Biblioteca.Repository.DTO.Catalogo.CatalogoResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Catalogo.Catalogo;
 import com.Biblioteca.Repository.Catalogo.CatalogoRepository;
@@ -24,10 +24,11 @@ public class CatalogoService {
 
     public boolean regitrarCatalogo (CatalogoRequest catalogoRequest ){
 
-        Catalogo newCatalogo = new Catalogo();
+        if(!getNombre(catalogoRequest.getNombre())){
+            Catalogo newCatalogo = new Catalogo();
 
-        newCatalogo.setNombre(catalogoRequest.getNombre());
-        newCatalogo.setInicialCodigo(catalogoRequest.getInicialCodigo());
+            newCatalogo.setNombre(catalogoRequest.getNombre());
+            newCatalogo.setEstado(catalogoRequest.getEstado());
 
             try {
                 catalogoRepository.save(newCatalogo);
@@ -35,6 +36,10 @@ public class CatalogoService {
             }catch (Exception e){
                 throw new BadRequestException("No se registró la el catalogo" +e);
             }
+        }else{
+            throw new BadRequestException("Ya existe un catalogo con ese nombre");
+        }
+
 
     }
 
@@ -47,7 +52,7 @@ public class CatalogoService {
 
             response.setId(catalogoRequest.getId());
             response.setNombre(catalogoRequest.getNombre());
-            response.setInicialCodigo(catalogoRequest.getInicialCodigo());
+            response.setEstado(catalogoRequest.getEstado());
 
             return response;
         }).collect(Collectors.toList());
@@ -60,7 +65,7 @@ public class CatalogoService {
 
         if(catalogo.isPresent()){
             catalogo.get().setNombre( catalogoRequest.getNombre());
-            catalogo.get().setInicialCodigo(catalogoRequest.getInicialCodigo());
+            catalogo.get().setEstado(catalogoRequest.getEstado());
 
             try{
                 catalogoRepository.save(catalogo.get());
@@ -73,5 +78,8 @@ public class CatalogoService {
         }
     }
 
+    private boolean getNombre(String nombre) {
+        return  catalogoRepository.existsByNombre(nombre);
+    }
 
 }

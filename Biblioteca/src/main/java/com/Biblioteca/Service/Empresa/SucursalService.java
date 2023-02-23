@@ -1,8 +1,8 @@
 package com.Biblioteca.Service.Empresa;
 
 import com.Biblioteca.Exceptions.BadRequestException;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalRequest;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalResponse;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.SucursalRequest;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.SucursalResponse;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +24,8 @@ public class SucursalService {
 
     public boolean regitrarSucursal (SucursalRequest sucursalRequest){
 
-        //Optional<Sucursal> optionalSucursal = sucursalRepository.findBySucursalLikeIgnoreCase(sucursalRequest.getNombre());
 
-        //Optional<Sucursal> optionalBarrio = barrioRepository.findByBarrioLikeIgnoreCase(barrioRequest.getBarrio());
-       // if(!optionalSucursal.isPresent()) {
+        if(!getNombre(sucursalRequest.getNombre())){
             Sucursal mewSucursal = new Sucursal();
             mewSucursal.setNombre(sucursalRequest.getNombre());
             mewSucursal.setLogo(sucursalRequest.getLogo());
@@ -38,9 +36,11 @@ public class SucursalService {
             }catch (Exception e){
                 throw new BadRequestException("No se registró la sucursal" +e);
             }
-       // }else{
-         //   throw new BadRequestException("Ya existe una sucursal con ese nombre");
-        //}
+        }else {
+            throw new BadRequestException("Ya existe una sucursal con ese nombre");
+        }
+
+
     }
 
 
@@ -74,6 +74,10 @@ public class SucursalService {
         } else {
             throw new BadRequestException("No existe un evento con id "+sucursalRequest.getId() );
         }
+    }
+
+    private boolean getNombre(String nombre) {
+        return  sucursalRepository.existsByNombre(nombre);
     }
 
 

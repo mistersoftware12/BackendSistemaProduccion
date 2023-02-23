@@ -1,4 +1,4 @@
-package com.Biblioteca.DTO.empresa.sucursales;
+package com.Biblioteca.Repository.DTO.empresa.sucursales;
 
 import lombok.Data;
 
@@ -26,6 +26,8 @@ public class BodegaResponse implements Serializable {
     private Long idSucursal;
 
     private String nombreSucursal;
+
+    private String nombreEstado;
 
     public BodegaResponse(Long id, Long idBodega, String nombre, String direccion, String telefono, String correo, String responsable, Boolean estado, Long idSucursal) {
         this.id = id;

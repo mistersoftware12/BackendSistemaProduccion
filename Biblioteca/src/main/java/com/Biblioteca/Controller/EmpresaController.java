@@ -1,7 +1,7 @@
 package com.Biblioteca.Controller;
 
-import com.Biblioteca.DTO.empresa.sucursales.*;
 import com.Biblioteca.Exceptions.Mensaje;
+import com.Biblioteca.Repository.DTO.empresa.sucursales.*;
 import com.Biblioteca.Service.Empresa.AlmacenService;
 import com.Biblioteca.Service.Empresa.BodegaService;
 import com.Biblioteca.Service.Empresa.SucursalService;

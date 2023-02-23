@@ -1,9 +1,7 @@
 package com.Biblioteca.Controller;
 
-import com.Biblioteca.DTO.Categoria.CategoriaRequest;
-import com.Biblioteca.DTO.Categoria.CategoriaResponse;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalRequest;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalResponse;
+import com.Biblioteca.Repository.DTO.Categoria.CategoriaRequest;
+import com.Biblioteca.Repository.DTO.Categoria.CategoriaResponse;
 import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.Categoria.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
