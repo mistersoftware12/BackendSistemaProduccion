@@ -1,4 +1,4 @@
-package com.Biblioteca.Repository.DTO.Catalogo;
+package com.Biblioteca.DTO.Catalogo;
 
 import lombok.Data;
 

@@ -2,9 +2,9 @@ package com.Biblioteca.Service.Empresa;
 
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Empresa.Sucursal;
-import com.Biblioteca.Repository.DTO.empresa.sucursales.AlmacenResponse;
-import com.Biblioteca.Repository.DTO.empresa.sucursales.TallerRequest;
-import com.Biblioteca.Repository.DTO.empresa.sucursales.TallerResponse;
+import com.Biblioteca.DTO.empresa.sucursales.AlmacenResponse;
+import com.Biblioteca.DTO.empresa.sucursales.TallerRequest;
+import com.Biblioteca.DTO.empresa.sucursales.TallerResponse;
 import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Models.Empresa.Sucursales.AlmacenBodegaTaller;
 import com.Biblioteca.Models.Empresa.Sucursales.Taller;

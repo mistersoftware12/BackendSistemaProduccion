@@ -1,4 +1,4 @@
-package com.Biblioteca.Repository.DTO.fecha;
+package com.Biblioteca.DTO.fecha;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
 package com.Biblioteca.Service.Persona;
 
+import com.Biblioteca.DTO.Persona.*;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Persona.Cliente;
@@ -7,7 +8,6 @@ import com.Biblioteca.Models.Persona.Persona;
 import com.Biblioteca.Models.Persona.Usuario;
 import com.Biblioteca.Models.Roles.Roles;
 
-import com.Biblioteca.Repository.DTO.Persona.*;
 import com.Biblioteca.Repository.Persona.ClienteRepository;
 import com.Biblioteca.Repository.Persona.PersonaRepository;
 import com.Biblioteca.Repository.Persona.UsuarioRepository;

@@ -1,4 +1,4 @@
-package com.Biblioteca.Repository.DTO.Persona;
+package com.Biblioteca.DTO.Persona;
 
 import lombok.Data;
 

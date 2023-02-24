@@ -1,5 +1,7 @@
 package com.Biblioteca.Models.Categoria;
 
+import com.Biblioteca.Models.Articulo.Articulo;
+import com.Biblioteca.Models.Persona.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +30,10 @@ public class Categoria implements Serializable {
     private  String inicialCodigo;
 
     private  Boolean estado;
+
+    @OneToOne(mappedBy = "categoria")
+    private Articulo articulo;
+
 }
 
 

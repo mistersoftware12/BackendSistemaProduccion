@@ -1,5 +1,7 @@
 package com.Biblioteca.Models.Catalogo;
 
+import com.Biblioteca.Models.Articulo.Articulo;
+import com.Biblioteca.Models.Persona.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +28,8 @@ public class Catalogo implements Serializable {
 
     private  Boolean estado;
 
+    @OneToOne(mappedBy = "catalogo")
+    private Articulo articulo;
 
 }
 

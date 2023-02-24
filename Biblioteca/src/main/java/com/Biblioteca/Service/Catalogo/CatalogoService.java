@@ -1,7 +1,7 @@
 package com.Biblioteca.Service.Catalogo;
 
-import com.Biblioteca.Repository.DTO.Catalogo.CatalogoRequest;
-import com.Biblioteca.Repository.DTO.Catalogo.CatalogoResponse;
+import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
+import com.Biblioteca.DTO.Catalogo.CatalogoResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Catalogo.Catalogo;
 import com.Biblioteca.Repository.Catalogo.CatalogoRepository;

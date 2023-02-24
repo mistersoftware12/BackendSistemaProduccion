@@ -1,4 +1,4 @@
-package com.Biblioteca.Repository.DTO.empresa.sucursales;
+package com.Biblioteca.DTO.empresa.sucursales;
 
 import lombok.Data;
 

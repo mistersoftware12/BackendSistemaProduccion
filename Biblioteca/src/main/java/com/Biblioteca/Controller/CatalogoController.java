@@ -1,7 +1,7 @@
 package com.Biblioteca.Controller;
 
-import com.Biblioteca.Repository.DTO.Catalogo.CatalogoRequest;
-import com.Biblioteca.Repository.DTO.Catalogo.CatalogoResponse;
+import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
+import com.Biblioteca.DTO.Catalogo.CatalogoResponse;
 import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.Catalogo.CatalogoService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.Biblioteca.Repository.DTO.Categoria;
+package com.Biblioteca.DTO.Categoria;
 
 import lombok.Data;
 

@@ -1,15 +1,15 @@
-package com.Biblioteca.Repository.DTO.empresa.sucursales;
+package com.Biblioteca.DTO.empresa.sucursales;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class BodegaResponse implements Serializable {
+public class TallerResponse implements Serializable {
 
     private  Long id;
 
-    private Long idBodega;
+    private Long idTaller;
 
     private String nombre;
 
@@ -29,9 +29,9 @@ public class BodegaResponse implements Serializable {
 
     private String nombreEstado;
 
-    public BodegaResponse(Long id, Long idBodega, String nombre, String direccion, String telefono, String correo, String responsable, Boolean estado, Long idSucursal) {
+    public TallerResponse(Long id, Long idTaller, String nombre, String direccion, String telefono, String correo, String responsable, Boolean estado, Long idSucursal) {
         this.id = id;
-        this.idBodega = idBodega;
+        this.idTaller = idTaller;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
@@ -41,6 +41,6 @@ public class BodegaResponse implements Serializable {
         this.idSucursal = idSucursal;
     }
 
-    public BodegaResponse() {
+    public TallerResponse() {
     }
 }

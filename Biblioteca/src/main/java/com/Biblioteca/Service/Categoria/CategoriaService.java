@@ -1,7 +1,7 @@
 package com.Biblioteca.Service.Categoria;
 
-import com.Biblioteca.Repository.DTO.Categoria.CategoriaRequest;
-import com.Biblioteca.Repository.DTO.Categoria.CategoriaResponse;
+import com.Biblioteca.DTO.Categoria.CategoriaRequest;
+import com.Biblioteca.DTO.Categoria.CategoriaResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Categoria.Categoria;
 import com.Biblioteca.Repository.Categoria.CategoriaRepository;
