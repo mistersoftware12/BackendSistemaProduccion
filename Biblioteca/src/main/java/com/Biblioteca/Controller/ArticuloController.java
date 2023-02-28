@@ -2,9 +2,9 @@ package com.Biblioteca.Controller;
 
 import com.Biblioteca.DTO.Articulo.ArticuloRequest;
 import com.Biblioteca.DTO.Articulo.ArticuloResponse;
-import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
-import com.Biblioteca.DTO.Persona.PersonaUsuarioResponse;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalResponse;
+import com.Biblioteca.DTO.Extra.ContarResponse;
+import com.Biblioteca.DTO.Extra.MaximoDatoResponse;
+import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.Articulo.ArticuloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +21,7 @@ public class ArticuloController {
     @Autowired
     ArticuloService articuloService;
 
+
     @GetMapping("/allArticulo")
     public ResponseEntity<List<ArticuloResponse>> allArticulo(){
 
@@ -29,15 +30,35 @@ public class ArticuloController {
     }
 
 
+
+
+
     @GetMapping("/allBylistaArticulo/{id}")
     public ResponseEntity<ArticuloResponse > listUsuarioById(@PathVariable Long id){
         ArticuloResponse info = articuloService.articulosById(id);
         return new ResponseEntity<>(info, HttpStatus.OK);
     }
 
+
+
+    @GetMapping("/allByMaximoCodigoBarra/{id}")
+    public ResponseEntity<MaximoDatoResponse> ContarMaximoCodigoBarraById(@PathVariable Long id){
+        MaximoDatoResponse  info = articuloService.CapturarMaximoCodigoBarraById(id);
+        return new ResponseEntity<>(info, HttpStatus.OK);
+    }
+
+
     @PostMapping("/registrarArticulo")
     public ResponseEntity<?> registroArticulo(@RequestBody ArticuloRequest request){
 
         return new ResponseEntity<>(articuloService.regitrarArticulo(request), HttpStatus.OK);
     }
+
+
+    @PutMapping("/updateArticulo")
+    public ResponseEntity<?> updateArticulo(@RequestBody ArticuloRequest articuloRequest){
+        articuloService.actualizardatosArticulo(articuloRequest);
+        return new ResponseEntity(new Mensaje("Artículo Actualizado"), HttpStatus.OK);
+    }
+
 }

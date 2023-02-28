@@ -2,7 +2,6 @@ package com.Biblioteca.Models.Articulo;
 
 import com.Biblioteca.Models.Catalogo.Catalogo;
 import com.Biblioteca.Models.Categoria.Categoria;
-import com.Biblioteca.Models.Persona.Persona;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +33,7 @@ public class Articulo implements Serializable {
     @Column(columnDefinition="text", length=10485760)
     private  String foto;
 
+    @Column(length = 9)
     private String codigoBarra;
 
     private Boolean estadoArticulo;
@@ -47,13 +47,13 @@ public class Articulo implements Serializable {
     private String vidaUtil;
 
     //medida
-    private float alto;
+    private String alto;
 
-    private float ancho;
+    private String ancho;
 
-    private float profundidad;
+    private String profundidad;
 
-    private float peso;
+    private String peso;
 
 
     //precioproducccion
@@ -79,13 +79,24 @@ public class Articulo implements Serializable {
 
 
     //herencia
-
+/*
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="categoria_id", referencedColumnName = "id")
     private Categoria categoria;
 
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="catalogo_id", referencedColumnName = "id")
+    private Catalogo catalogo;*/
+
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "categoria_id",referencedColumnName = "id")
+    private Categoria categoria;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "catalogo_id",referencedColumnName = "id")
     private Catalogo catalogo;
 
 

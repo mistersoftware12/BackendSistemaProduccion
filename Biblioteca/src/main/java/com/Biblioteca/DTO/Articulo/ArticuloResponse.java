@@ -21,10 +21,10 @@ public class ArticuloResponse implements Serializable {
     private String vidaUtil;
 
     //medida
-    private float alto;
-    private float ancho;
-    private float profundidad;
-    private float peso;
+    private String alto;
+    private String ancho;
+    private String profundidad;
+    private String peso;
 
 
     //precioproducccion
@@ -47,7 +47,15 @@ public class ArticuloResponse implements Serializable {
     private Long idCategoria;
     private Long idCatalogo;
 
-    public ArticuloResponse(Long id, String nombre, String descripcion, Integer stockMinimo, String color, String foto, String codigoBarra, Boolean estadoArticulo, Boolean estadoWeb, String codigoCompra, String marca, String vidaUtil, float alto, float ancho, float profundidad, float peso, float precioCosto, float iva, float precioIva, float precioStandar, float margenProduccion, float precioProduccion, float margenVenta, float precioVenta, float precioFinal, Long idCategoria, Long idCatalogo) {
+
+    //Extras
+    private String nombreCategoria;
+    private  String nombreCatalogo;
+    private String nombreEstadoArticulo;
+    private String nombreEstadoWeb;
+
+
+    public ArticuloResponse(Long id, String nombre, String descripcion, Integer stockMinimo, String color, String foto, String codigoBarra, Boolean estadoArticulo, Boolean estadoWeb, String codigoCompra, String marca, String vidaUtil, String alto, String ancho, String profundidad, String peso, float precioCosto, float iva, float precioIva, float precioStandar, float margenProduccion, float precioProduccion, float margenVenta, float precioVenta, float precioFinal, Long idCategoria, Long idCatalogo) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;

@@ -60,6 +60,8 @@ public class AlmacenService {
         }).collect(Collectors.toList());
     }
 
+
+
     @Transactional
     public AlmacenResponse registrarAlmacen(AlmacenRequest almacenRequest) {
         Optional<AlmacenBodegaTaller> optional1 = almacenBodegaTallerRepository.findByNombreAndBusqueda(almacenRequest.getNombre());

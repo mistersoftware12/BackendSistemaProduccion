@@ -1,5 +1,7 @@
 package com.Biblioteca.Models.Persona;
 
+import com.Biblioteca.Models.Cuidad.Cuidad;
+import com.Biblioteca.Models.Empresa.Sucursal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +26,12 @@ public class Cliente implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="persona_id", referencedColumnName = "id")
     private Persona persona;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="cuidad_id", referencedColumnName = "id")
+    private Cuidad cuidad;
+
+
 
 }

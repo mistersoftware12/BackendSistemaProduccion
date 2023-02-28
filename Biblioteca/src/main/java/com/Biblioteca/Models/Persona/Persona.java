@@ -32,6 +32,8 @@ public class Persona implements Serializable {
 
     private String direccion;
 
+    private String cuidad;
+
     @Column(name = "fecha_nacimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;

@@ -1,7 +1,6 @@
 package com.Biblioteca.Models.Categoria;
 
 import com.Biblioteca.Models.Articulo.Articulo;
-import com.Biblioteca.Models.Persona.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Table(name = "categoria")
 @Entity
@@ -31,8 +31,13 @@ public class Categoria implements Serializable {
 
     private  Boolean estado;
 
+    /*
     @OneToOne(mappedBy = "categoria")
-    private Articulo articulo;
+    private Articulo articulo;*/
+
+
+    @OneToMany (targetEntity = Articulo.class, mappedBy = "categoria")
+    private List<Articulo> articulo;
 
 }
 

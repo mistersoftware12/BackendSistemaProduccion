@@ -21,10 +21,10 @@ public class ArticuloRequest implements Serializable {
     private String vidaUtil;
 
     //medida
-    private float alto;
-    private float ancho;
-    private float profundidad;
-    private float peso;
+        private String alto;
+    private String ancho;
+    private String profundidad;
+    private String peso;
 
 
     //precioproducccion
@@ -44,6 +44,12 @@ public class ArticuloRequest implements Serializable {
 
     private Long idCategoria;
     private Long idCatalogo;
+
+    //Extras
+    private String nombreCategoria;
+    private  String nombreCatalogo;
+    private String nombreEstadoArticulo;
+    private String nombreEstadoWeb;
 
 
 }

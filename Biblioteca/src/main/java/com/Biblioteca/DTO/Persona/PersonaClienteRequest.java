@@ -24,6 +24,10 @@ public class PersonaClienteRequest implements Serializable {
 
     private Date fechaNacimiento;
 
+    private  Long idCuidad;
+
+    private  String nombreCuidad;
+
 
 
 }

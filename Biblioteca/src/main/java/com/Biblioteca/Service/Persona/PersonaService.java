@@ -2,12 +2,14 @@ package com.Biblioteca.Service.Persona;
 
 import com.Biblioteca.DTO.Persona.*;
 import com.Biblioteca.Exceptions.BadRequestException;
+import com.Biblioteca.Models.Cuidad.Cuidad;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Persona.Cliente;
 import com.Biblioteca.Models.Persona.Persona;
 import com.Biblioteca.Models.Persona.Usuario;
 import com.Biblioteca.Models.Roles.Roles;
 
+import com.Biblioteca.Repository.CuidadRepository;
 import com.Biblioteca.Repository.Persona.ClienteRepository;
 import com.Biblioteca.Repository.Persona.PersonaRepository;
 import com.Biblioteca.Repository.Persona.UsuarioRepository;
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class PersonaService implements UserDetailsService {
+    @Autowired
+    private CuidadRepository cuidadRepository;
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -323,7 +327,7 @@ public class PersonaService implements UserDetailsService {
                 Persona persona = personaRepository.save(newPersona);
                 if (persona != null) {
 
-                    guardarCliente(persona.getCedula());
+                    guardarCliente(persona.getCedula() , personaClienteRequest.getIdCuidad());
 
 
                     Optional<Cliente> cliente = clienteRepository.findByPersona(persona);
@@ -344,13 +348,20 @@ public class PersonaService implements UserDetailsService {
         }
     }
 
-    private boolean guardarCliente(String cedula){
+    private boolean guardarCliente(String cedula , Long idCuidad){
 
         Optional<Persona> optionalPersona = personaRepository.findByCedula(cedula);
         if(optionalPersona.isPresent()){
-                Persona persona = optionalPersona.get();
+            Persona persona = optionalPersona.get();
+            Optional<Cuidad> optionalCuidad = cuidadRepository.findById(idCuidad);
+
+            if (optionalPersona.isPresent()){
+                Cuidad cuidad = optionalCuidad.get();
+
+
                 Cliente newCliente = new Cliente();
                 newCliente.setPersona(persona);
+                newCliente.setCuidad(cuidad);
                 Cliente cliente = clienteRepository.save(newCliente);
 
                 if(cliente!=null){
@@ -358,6 +369,13 @@ public class PersonaService implements UserDetailsService {
                 }else{
                     throw new BadRequestException("Cliente no registrado");
                 }
+
+            }else{
+                throw new BadRequestException("no existe una cuidad con el id ingresado");
+            }
+
+
+
 
 
 
@@ -381,7 +399,8 @@ public class PersonaService implements UserDetailsService {
             pcr.setEmail(clienteRequest.getPersona().getEmail());
             pcr.setFechaNacimiento(clienteRequest.getPersona().getFechaNacimiento());
             pcr.setDireccion(clienteRequest.getPersona().getDireccion());
-
+            pcr.setIdCuidad(clienteRequest.getCuidad().getId());
+            pcr.setNombreCuidad(clienteRequest.getCuidad().getNombre());
 
             return pcr;
         }).collect(Collectors.toList());
@@ -402,7 +421,7 @@ public class PersonaService implements UserDetailsService {
             try{
                 Persona persona = personaRepository.save(optionalPersona.get());
                 if(persona != null){
-                    actualizarUsuario(persona);
+                    actualizarUsuario(persona , personaClienteRequest.getIdCuidad());
 
                 }else {
                     throw new BadRequestException("No se actualizó la persona");
@@ -416,18 +435,32 @@ public class PersonaService implements UserDetailsService {
         return false;
     }
 
-    private boolean actualizarUsuario(Persona persona){
+    private boolean actualizarUsuario(Persona persona , Long idCuidad){
         Optional<Cliente> optionalCliente = clienteRepository.findByPersona(persona);
         if(optionalCliente.isPresent()){
-
             optionalCliente.get().setPersona(persona);
-                    try{
 
-                        Cliente cliente = clienteRepository.save(optionalCliente.get());
-                        return true;
-                    }catch (Exception ex) {
-                        throw new BadRequestException("No se actualizó tbl_cliente" + ex);
-                    }
+            Optional<Cuidad> optionalCuidad = cuidadRepository.findById(idCuidad);
+            Cuidad cuidad = optionalCuidad.get();
+
+            if(optionalCuidad.isPresent()){
+            optionalCliente.get().setCuidad(cuidad);
+
+                try{
+
+                    Cliente cliente = clienteRepository.save(optionalCliente.get());
+                    return true;
+                }catch (Exception ex) {
+                    throw new BadRequestException("No se actualizó tbl_cliente" + ex);
+                }
+
+            }else{
+                throw new BadRequestException("La cuidad ingresada, no está registrada");
+            }
+
+
+
+
 
 
         }else{

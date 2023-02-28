@@ -25,6 +25,9 @@ public class PersonaClienteResponse implements Serializable {
     private Date fechaNacimiento;
 
 
+    private  Long idCuidad;
+
+    private  String nombreCuidad;
 
     public PersonaClienteResponse(Long id, String cedula, String apellidos, String nombres, String email, String telefono, String direccion, Date fechaNacimiento) {
         this.id = id;

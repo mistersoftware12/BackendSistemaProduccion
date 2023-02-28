@@ -2,16 +2,15 @@ package com.Biblioteca.Service.Articulo;
 
 import com.Biblioteca.DTO.Articulo.ArticuloRequest;
 import com.Biblioteca.DTO.Articulo.ArticuloResponse;
-import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
-import com.Biblioteca.DTO.Persona.PersonaUsuarioResponse;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalResponse;
+
+import com.Biblioteca.DTO.Categoria.CategoriaResponse;
+import com.Biblioteca.DTO.Extra.ContarResponse;
+import com.Biblioteca.DTO.Extra.MaximoDatoResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Articulo.Articulo;
 import com.Biblioteca.Models.Catalogo.Catalogo;
 import com.Biblioteca.Models.Categoria.Categoria;
-import com.Biblioteca.Models.Empresa.Sucursal;
-import com.Biblioteca.Models.Persona.Persona;
-import com.Biblioteca.Models.Persona.Usuario;
+
 import com.Biblioteca.Repository.Articulo.ArticuloRepository;
 import com.Biblioteca.Repository.Catalogo.CatalogoRepository;
 import com.Biblioteca.Repository.Categoria.CategoriaRepository;
@@ -19,6 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,7 +71,7 @@ public class ArticuloService {
 
                     //medida
                     newArticulo.setAlto(articuloRequest.getAlto());
-                    newArticulo.setAlto(articuloRequest.getAncho());
+                    newArticulo.setAncho(articuloRequest.getAncho());
                     newArticulo.setProfundidad(articuloRequest.getProfundidad());
                     newArticulo.setPeso(articuloRequest.getPeso());
 
@@ -85,6 +89,8 @@ public class ArticuloService {
 
                     newArticulo.setCategoria(optionalCategoria.get());
                     newArticulo.setCatalogo(optionalCatalogo.get());
+
+
 
 
                     try {
@@ -132,7 +138,7 @@ public class ArticuloService {
 
             //medida
             response.setAlto(articuloRequest.getAlto());
-            response.setAlto(articuloRequest.getAncho());
+            response.setAncho(articuloRequest.getAncho());
             response.setProfundidad(articuloRequest.getProfundidad());
             response.setPeso(articuloRequest.getPeso());
 
@@ -152,9 +158,22 @@ public class ArticuloService {
             response.setIdCategoria(articuloRequest.getCategoria().getId());
             response.setIdCatalogo(articuloRequest.getCatalogo().getId());
 
+            response.setNombreCatalogo(articuloRequest.getCatalogo().getNombre());
+            response.setNombreCategoria(articuloRequest.getCategoria().getNombre());
+
+            if(articuloRequest.getEstadoArticulo() == true){
+                response.setNombreEstadoArticulo("Activo");
+            }
+
+            if(articuloRequest.getEstadoArticulo() == false){
+                response.setNombreEstadoArticulo("Inactivo");
+            }
+
+
             return response;
         }).collect(Collectors.toList());
     }
+
 
 
     public  ArticuloResponse articulosById(Long id){
@@ -177,7 +196,7 @@ public class ArticuloService {
 
             //medida
             response.setAlto(articuloRequest.get().getAlto());
-            response.setAlto(articuloRequest.get().getAncho());
+            response.setAncho(articuloRequest.get().getAncho());
             response.setProfundidad(articuloRequest.get().getProfundidad());
             response.setPeso(articuloRequest.get().getPeso());
 
@@ -197,42 +216,192 @@ public class ArticuloService {
             response.setIdCategoria(articuloRequest.get().getCategoria().getId());
             response.setIdCatalogo(articuloRequest.get().getCatalogo().getId());
 
+
+            response.setNombreCatalogo(articuloRequest.get().getCatalogo().getNombre());
+            response.setNombreCategoria(articuloRequest.get().getCategoria().getNombre());
+
+
+            if(articuloRequest.get().getEstadoWeb() == true){
+                response.setNombreEstadoWeb("Si");
+            }
+
+            if(articuloRequest.get().getEstadoWeb() == false){
+                response.setNombreEstadoWeb("No");
+            }
+
+
             return response;
         }else{
             throw new BadRequestException("No existe un artículo con id seleccionado");
         }
 
-/*
-        PersonaUsuarioResponse response = new PersonaUsuarioResponse();
-        Optional<Persona> persona = personaRepository.findByCedula(cedula);
-        if(persona.isPresent()) {
-            Optional<Usuario> user = usuarioRepository.findByPersona(persona.get());
-            if(user.isPresent()) {
-                response.setId(persona.get().getId());
-                response.setIdUsuario(user.get().getId());
-                response.setCedula(user.get().getPersona().getCedula());
-                response.setNombres(user.get().getPersona().getNombres());
-                response.setApellidos(user.get().getPersona().getApellidos());
-                response.setTelefono(user.get().getPersona().getTelefono());
-                response.setEmail(user.get().getPersona().getEmail());
-                response.setIdRol(user.get().getRoles().getId());
-                response.setFechaNacimiento(user.get().getPersona().getFechaNacimiento());
-                response.setDireccion(user.get().getPersona().getDireccion());
-                response.setIdSucursal(user.get().getSucursal().getId());
-
-                return response;
-            }else{
-                throw new BadRequestException("No existe un articulo con id" +cedula);
-            }
-        }else{
-            throw new BadRequestException("No existe un cliente vinculado a esa persona");
-        }*/
     }
 
 
+
+    @Transactional
+    public boolean actualizardatosArticulo(ArticuloRequest articuloRequest ){
+        Optional<Articulo> articulo = articuloRepository.findById(articuloRequest.getId());
+
+        if(articulo.isPresent()){
+
+            Optional<Catalogo> optionalCatalogo = catalogoRepository.findById(articuloRequest.getIdCatalogo());
+
+            if(optionalCatalogo.isPresent()){
+
+                Optional<Categoria> optionalCategoria = categoriaRepository.findById(articuloRequest.getIdCategoria());
+
+                if(optionalCategoria.isPresent()){
+                    articulo.get().setNombre(articuloRequest.getNombre());
+                    articulo.get().setDescripcion(articuloRequest.getDescripcion());
+                    articulo.get().setStockMinimo(articuloRequest.getStockMinimo());
+                    articulo.get().setColor(articuloRequest.getColor());
+                    articulo.get().setFoto(articuloRequest.getFoto());
+                    articulo.get().setCodigoBarra(articuloRequest.getCodigoBarra());
+                    articulo.get().setEstadoArticulo(articuloRequest.getEstadoArticulo());
+                    articulo.get().setEstadoWeb(articuloRequest.getEstadoWeb());
+                    articulo.get().setCodigoCompra(articuloRequest.getCodigoCompra());
+                    articulo.get().setMarca(articuloRequest.getMarca());
+                    articulo.get().setVidaUtil(articuloRequest.getVidaUtil());
+
+                    //medida
+                    articulo.get().setAlto(articuloRequest.getAlto());
+                    articulo.get().setAncho(articuloRequest.getAncho());
+                    articulo.get().setProfundidad(articuloRequest.getProfundidad());
+                    articulo.get().setPeso(articuloRequest.getPeso());
+
+                    //precio
+                    articulo.get().setPrecioCosto(articuloRequest.getPrecioCosto());
+                    articulo.get().setIva(articuloRequest.getIva());
+                    articulo.get().setPrecioIva(articuloRequest.getPrecioIva());
+                    articulo.get().setPrecioStandar(articuloRequest.getPrecioStandar());
+                    articulo.get().setMargenProduccion(articuloRequest.getMargenProduccion());
+                    articulo.get().setPrecioProduccion(articuloRequest.getPrecioProduccion());
+                    articulo.get().setMargenVenta(articuloRequest.getMargenVenta());
+                    articulo.get().setPrecioVenta(articuloRequest.getPrecioVenta());
+                    articulo.get().setPrecioFinal(articuloRequest.getPrecioFinal());
+
+                    //heredado
+
+                    articulo.get().setCategoria(optionalCategoria.get());
+                    articulo.get().setCatalogo(optionalCatalogo.get());
+
+                    try{
+                        articuloRepository.save(articulo.get());
+                        return true;
+                    }catch (Exception ex) {
+                        throw new BadRequestException("No se actualizo" + ex);
+                    }
+                }else {
+                    throw new BadRequestException("No existe una categoria   con id "+articuloRequest.getIdCategoria() );
+                }
+
+            }else {
+                throw new BadRequestException("No existe un catalogo  con id "+articuloRequest.getIdCatalogo() );
+            }
+
+
+        } else {
+            throw new BadRequestException("No existe un articulo  con id "+articuloRequest.getId() );
+        }
+    }
+
+
+
+
+
+    public MaximoDatoResponse CapturarMaximoCodigoBarraById (Long id){
+
+        MaximoDatoResponse response = new MaximoDatoResponse();
+
+
+        String valorFinal = "";
+        if(count1(id) == BigInteger.valueOf(0)){
+            System.out.println("Valor cero");
+            valorFinal = inicate(id) + "00001";
+
+        }else{
+
+            String palabra, patron , numerooini;
+            int i;
+
+            palabra = max1(id);
+            i = 0;
+            patron = "";
+            numerooini = "";
+
+            while (i < palabra.length()) {
+
+                if(i < 4){
+                    patron = patron+ palabra.charAt(i) ;
+                }
+
+                if(i>3){
+                    numerooini = numerooini + palabra.charAt(i);
+                }
+
+                i++;
+            }
+
+            i = Integer.parseInt(numerooini) +1;
+            String valoras = String.valueOf(i);
+
+            if(valoras.length() == 1){
+                valoras = "0000"+valoras;
+            }
+
+            if(valoras.length() == 2){
+                valoras = "000"+valoras;
+            }
+            if(valoras.length() == 3){
+                valoras = "00"+valoras;
+            }
+            if(valoras.length() == 4){
+                valoras = "0"+valoras;
+            }
+            if(valoras.length() == 5){
+                valoras = valoras;
+            }
+
+
+            valorFinal = patron +valoras;
+
+
+        }
+
+        response.setMaximoDato(String.valueOf(valorFinal));
+
+        return response;
+
+    }
 
     private boolean getNombre(String nombre) {
         return  articuloRepository.existsByNombre(nombre);
     }
+
+
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+
+    public BigInteger count1(Long id) {
+        Query nativeQuery = entityManager.createNativeQuery("select count(id) from articulo where categoria_id =?");
+        nativeQuery.setParameter(1, id);
+        return (BigInteger) nativeQuery.getSingleResult();
+    }
+
+    public String max1(Long id) {
+        Query nativeQuery = entityManager.createNativeQuery("select MAX(codigo_barra) from articulo where categoria_id =?");
+        nativeQuery.setParameter(1, id);
+        return (String) nativeQuery.getSingleResult();
+    }
+
+    public String inicate(Long id) {
+        Query nativeQuery = entityManager.createNativeQuery("SELECT incial_codigo FROM categoria WHERE id =?");
+        nativeQuery.setParameter(1, id);
+        return (String) nativeQuery.getSingleResult();
+    }
+
 
 }

@@ -1,8 +1,10 @@
 package com.Biblioteca.Service.Categoria;
 
+import com.Biblioteca.DTO.Articulo.ArticuloResponse;
 import com.Biblioteca.DTO.Categoria.CategoriaRequest;
 import com.Biblioteca.DTO.Categoria.CategoriaResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
+import com.Biblioteca.Models.Articulo.Articulo;
 import com.Biblioteca.Models.Categoria.Categoria;
 import com.Biblioteca.Repository.Categoria.CategoriaRepository;
 import com.Biblioteca.Repository.Empresa.SucursalRepository;
@@ -72,6 +74,27 @@ public class CategoriaService {
             return response;
         }).collect(Collectors.toList());
     }
+
+
+    public CategoriaResponse categoriaById (Long id){
+
+        CategoriaResponse response = new CategoriaResponse();
+        Optional<Categoria> categoriaRequest = categoriaRepository.findById(id);
+
+        if(categoriaRequest.isPresent()){
+
+            response.setId(categoriaRequest.get().getId());
+            response.setNombre(categoriaRequest.get().getNombre());
+            response.setInicialCodigo(categoriaRequest.get().getInicialCodigo());
+
+
+            return response;
+        }else{
+            throw new BadRequestException("No existe una categoria  con id seleccionado");
+        }
+
+    }
+
 
     @Transactional
     public boolean actualizardatosCategoria( CategoriaRequest categoriaRequest ){
