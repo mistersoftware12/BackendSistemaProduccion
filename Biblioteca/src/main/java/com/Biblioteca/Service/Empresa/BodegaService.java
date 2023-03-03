@@ -65,6 +65,36 @@ public class BodegaService {
         }).collect(Collectors.toList());
     }
 
+    public List<BodegaResponse> listAllBodegaPorScucursaById(Long idSucursal){
+
+        List<Bodega> bodega = bodegaRepository.findAllByIdSucursal(idSucursal);
+
+        return bodega.stream().map( bodegaRequest->{
+            BodegaResponse pcr = new BodegaResponse();
+            pcr.setId(bodegaRequest.getAlmacenBodegaTaller().getId());
+            pcr.setIdBodega(bodegaRequest.getId());
+            pcr.setNombre(bodegaRequest.getAlmacenBodegaTaller().getNombre());
+            pcr.setDireccion(bodegaRequest.getAlmacenBodegaTaller().getDireccion());
+            pcr.setTelefono(bodegaRequest.getAlmacenBodegaTaller().getTelefono());
+            pcr.setCorreo(bodegaRequest.getAlmacenBodegaTaller().getCorreo());
+            pcr.setResponsable(bodegaRequest.getAlmacenBodegaTaller().getResponsable());
+            pcr.setEstado(bodegaRequest.getAlmacenBodegaTaller().getEstado());
+            pcr.setIdSucursal(bodegaRequest.getSucursal().getId());
+            pcr.setNombreSucursal(bodegaRequest.getSucursal().getNombre());
+
+            if(bodegaRequest.getAlmacenBodegaTaller().getEstado() == true){
+                pcr.setNombreEstado("Activo");
+            }
+
+            if(bodegaRequest.getAlmacenBodegaTaller().getEstado() == false){
+                pcr.setNombreEstado("Inactivo");
+            }
+
+
+            return pcr;
+        }).collect(Collectors.toList());
+    }
+
     @Transactional
     public AlmacenResponse registrarBodega(BodegaRequest bodegaRequest) {
         Optional<AlmacenBodegaTaller> optional1 = almacenBodegaTallerRepository.findByNombreAndBusqueda(bodegaRequest.getNombre());

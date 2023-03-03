@@ -86,4 +86,37 @@ public class PersonaController {
         return new ResponseEntity<>(personaResponse, HttpStatus.CREATED);
     }
 
+
+    //Proveedro
+
+    @PostMapping("/registroProveedor")
+    public ResponseEntity<PersonaProveedorResponse> registroProveedor(@RequestBody PersonaProveedorRequest personaRequest) throws Exception {
+        PersonaProveedorResponse personaResponse = personaService.registrarProveedor(personaRequest);
+        if (personaResponse == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(personaResponse, HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("/allProveedores")
+    public ResponseEntity<List<PersonaProveedorResponse>> listAllProveedores() {
+        List<PersonaProveedorResponse> proveedor = personaService.listAllProveedor();
+
+        return  new ResponseEntity<List<PersonaProveedorResponse>>(proveedor , HttpStatus.OK);
+    }
+
+
+    @GetMapping("/allproveedorcedula/{cedula}")
+    public ResponseEntity<PersonaProveedorResponse> listProveedorByCedula(@PathVariable String cedula){
+       PersonaProveedorResponse pro = personaService.proveedorByCedula(cedula);
+        return new ResponseEntity<>(pro, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateProveedor")
+    public ResponseEntity<?> updateProveedor(@RequestBody  PersonaProveedorRequest request) {
+        personaService.updateProveedor(request);
+        return new ResponseEntity(new Mensaje("Proveedor Actualizado"), HttpStatus.OK);
+    }
+
 }

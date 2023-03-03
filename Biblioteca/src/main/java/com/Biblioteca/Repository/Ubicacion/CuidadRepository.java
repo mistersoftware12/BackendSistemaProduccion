@@ -1,6 +1,6 @@
-package com.Biblioteca.Repository;
+package com.Biblioteca.Repository.Ubicacion;
 
-import com.Biblioteca.Models.Cuidad.Cuidad;
+import com.Biblioteca.Models.Ubicacion.Cuidad;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

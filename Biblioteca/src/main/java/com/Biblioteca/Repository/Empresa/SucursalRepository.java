@@ -13,7 +13,7 @@ public interface SucursalRepository extends JpaRepository<Sucursal , Long> {
 
 
 
-    //@Query(value = "SELECT * FROM sucursal where UPPER(nombre) = UPPER(:nombre)", nativeQuery = true)
+
     Optional<Sucursal> findByNombre(String nombre);
 
     Boolean existsByNombre (String nombre);

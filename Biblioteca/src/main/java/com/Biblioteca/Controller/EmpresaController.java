@@ -77,6 +77,28 @@ public class EmpresaController {
         return new ResponseEntity<List<TallerResponse>>(allTalleres, HttpStatus.OK);
     }
 
+    //Por id sucursal
+
+    @GetMapping("/allAlmacenByIdSucursal/{idSucursal}")
+    public ResponseEntity<List<AlmacenResponse>> listAllAlmacenByIdSucursal(@PathVariable Long idSucursal) {
+        List<AlmacenResponse> allAlmacenes = almacenService.listAllAlmacenPorScucursaById(idSucursal);
+        return new ResponseEntity<List<AlmacenResponse>>(allAlmacenes, HttpStatus.OK);
+    }
+
+    @GetMapping("/allBodegaBySucursal/{idSucursal}")
+    public ResponseEntity<List<BodegaResponse>> listAllAlmacesByIdSucursal(@PathVariable Long idSucursal) {
+        List<BodegaResponse> allAlmacenes = bodegaService.listAllBodegaPorScucursaById(idSucursal);
+        return new ResponseEntity<List<BodegaResponse>>(allAlmacenes, HttpStatus.OK);
+    }
+
+    @GetMapping("/allTalleByIdSucursal/{idSucursal}")
+    public ResponseEntity<List<TallerResponse>> listAllAlmacenssByIdSucursal(@PathVariable Long idSucursal) {
+        List<TallerResponse> allAlmacenes = tallerService.listAllTallerPorScucursaById(idSucursal);
+        return new ResponseEntity<List<TallerResponse>>(allAlmacenes, HttpStatus.OK);
+    }
+
+
+
 
     @PutMapping("/updateSucursal")
     public ResponseEntity<?> updateSucursal(@RequestBody SucursalRequest sucursalRequest){

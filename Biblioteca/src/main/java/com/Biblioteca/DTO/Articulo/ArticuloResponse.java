@@ -87,4 +87,8 @@ public class ArticuloResponse implements Serializable {
 
     public ArticuloResponse() {
     }
+
+    public ArticuloResponse(Long id) {
+        this.id = id;
+    }
 }

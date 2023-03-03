@@ -2,20 +2,24 @@ package com.Biblioteca.Service.Persona;
 
 import com.Biblioteca.DTO.Persona.*;
 import com.Biblioteca.Exceptions.BadRequestException;
-import com.Biblioteca.Models.Cuidad.Cuidad;
+import com.Biblioteca.Models.Persona.Proveedor;
+import com.Biblioteca.Models.Ubicacion.Cuidad;
 import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Persona.Cliente;
 import com.Biblioteca.Models.Persona.Persona;
 import com.Biblioteca.Models.Persona.Usuario;
 import com.Biblioteca.Models.Roles.Roles;
 
-import com.Biblioteca.Repository.CuidadRepository;
+import com.Biblioteca.Models.Ubicacion.Pais;
+import com.Biblioteca.Repository.Persona.ProveedorRepository;
+import com.Biblioteca.Repository.Ubicacion.CuidadRepository;
 import com.Biblioteca.Repository.Persona.ClienteRepository;
 import com.Biblioteca.Repository.Persona.PersonaRepository;
 import com.Biblioteca.Repository.Persona.UsuarioRepository;
 import com.Biblioteca.Repository.Empresa.SucursalRepository;
 import com.Biblioteca.Repository.RolesRepository;
 
+import com.Biblioteca.Repository.Ubicacion.PaisRepository;
 import com.Biblioteca.Security.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class PersonaService implements UserDetailsService {
+    @Autowired
+    private ProveedorRepository proveedorRepository;
+    @Autowired
+    private PaisRepository paisRepository;
     @Autowired
     private CuidadRepository cuidadRepository;
     @Autowired
@@ -307,7 +315,7 @@ public class PersonaService implements UserDetailsService {
 
 
 
-    //cliente
+    //////////////////////////////////////////// CLIENTE
 
     @Transactional
     public PersonaClienteResponse registrarCliente(PersonaClienteRequest personaClienteRequest) throws Exception {
@@ -468,4 +476,220 @@ public class PersonaService implements UserDetailsService {
         }
     }
 
+
+
+
+    //////////////////////////////////////////// PROVEEDOR
+
+    @Transactional
+    public PersonaProveedorResponse registrarProveedor( PersonaProveedorRequest personaProveedorRequest) throws Exception {
+        Optional<Persona> optionalPersona = personaRepository.findByCedula(personaProveedorRequest.getCedula());
+
+        if(!optionalPersona.isPresent()) {
+            Persona newPersona = new Persona();
+            newPersona.setCedula(personaProveedorRequest.getCedula());
+            newPersona.setApellidos(personaProveedorRequest.getApellidos());
+            newPersona.setNombres(personaProveedorRequest.getNombres());
+            newPersona.setTelefono(personaProveedorRequest.getTelefono());
+            newPersona.setEmail(personaProveedorRequest.getEmail());
+            newPersona.setDireccion(personaProveedorRequest.getDireccion());
+            newPersona.setFechaNacimiento(personaProveedorRequest.getFechaNacimiento());
+
+            if (!getPersona(personaProveedorRequest.getCedula())) {
+                Persona persona = personaRepository.save(newPersona);
+                if (persona != null) {
+
+                    guardarProveedor(persona.getCedula() , personaProveedorRequest.getIdPais() , personaProveedorRequest.getNombreBanco(), personaProveedorRequest.getNumeroCuenta() , personaProveedorRequest.getNombreCuidad() );
+
+
+                    Optional<Proveedor> proveedor = proveedorRepository.findByPersona(persona);
+
+                    return new PersonaProveedorResponse();
+                    /*
+                    return new PersonaClienteResponse(persona.getId(), persona.getCedula(),
+                            persona.getApellidos(), persona.getNombres(), persona.getEmail(),
+                            persona.getTelefono(), persona.getDireccion(), persona.getFechaNacimiento());*/
+
+                }else {
+                    log.error("No se puedo guardar el proveedor con cédula: {}", personaProveedorRequest.getCedula());
+                    throw new BadRequestException("No se pudo guardar el usuario");
+                }
+            }else {
+                log.error("La cédula ya está registrada: {}", personaProveedorRequest.getCedula());
+                throw new BadRequestException("La cedula ingresada, ya esta registrada, si la cedula le pertenece contactenos a");
+            }
+        }else {
+            throw new BadRequestException("La cédula ingresada, ya esta registrado");
+        }
+    }
+
+    private boolean guardarProveedor(String cedula , Long idPais , String nombreBanco ,String numeroCuenta  , String nombreCuidad){
+
+        Optional<Persona> optionalPersona = personaRepository.findByCedula(cedula);
+        if(optionalPersona.isPresent()){
+            Persona persona = optionalPersona.get();
+            Optional<Pais> optionalPais =  paisRepository.findById(idPais);
+
+            if (optionalPersona.isPresent()){
+                Pais pais = optionalPais.get();
+
+                Proveedor newProveedor = new Proveedor();
+                newProveedor.setPersona(persona);
+                newProveedor.setPais(pais);
+                newProveedor.setNombrebanco(nombreBanco);
+                newProveedor.setNumeroCuenta(numeroCuenta);
+                newProveedor.setNombreCuidad(nombreCuidad);
+                Proveedor proveedor = proveedorRepository.save(newProveedor);
+
+
+                if(proveedor!=null){
+                    return true;
+                }else{
+                    throw new BadRequestException("Proveedor no registrado");
+                }
+
+            }else{
+                throw new BadRequestException("no existe un pais con el id ingresado");
+            }
+
+        }else{
+            throw new BadRequestException("La cedula ingresada, no está registrada");
+        }
+    }
+
+
+
+    public List<PersonaProveedorResponse> listAllProveedor(){
+
+        List<Proveedor> proveedors = proveedorRepository.findAll();
+
+
+        return proveedors.stream().map(proveedorRequest ->{
+
+            PersonaProveedorResponse pcr = new PersonaProveedorResponse();
+
+
+            pcr.setId(proveedorRequest.getPersona().getId());
+            pcr.setIdProveedor(proveedorRequest.getId());
+            pcr.setCedula(proveedorRequest.getPersona().getCedula());
+            pcr.setNombres(proveedorRequest.getPersona().getNombres());
+            pcr.setApellidos(proveedorRequest.getPersona().getApellidos());
+            pcr.setTelefono(proveedorRequest.getPersona().getTelefono());
+            pcr.setEmail(proveedorRequest.getPersona().getEmail());
+            pcr.setFechaNacimiento(proveedorRequest.getPersona().getFechaNacimiento());
+            pcr.setDireccion(proveedorRequest.getPersona().getDireccion());
+            pcr.setNombreBanco(proveedorRequest.getNombrebanco());
+            pcr.setNumeroCuenta(proveedorRequest.getNumeroCuenta());
+            pcr.setIdPais(proveedorRequest.getPais().getId());
+            pcr.setNombrePais(proveedorRequest.getPais().getNombre());
+            pcr.setNombreCuidad(proveedorRequest.getNombreCuidad());
+
+            return pcr;
+        }).collect(Collectors.toList());
+    }
+
+
+    public PersonaProveedorResponse proveedorByCedula(String cedula){
+        PersonaProveedorResponse response = new PersonaProveedorResponse();
+
+        Optional<Persona> persona = personaRepository.findByCedula(cedula);
+
+        if(persona.isPresent()) {
+            Optional<Proveedor> proveedor = proveedorRepository.findByPersona(persona.get());
+
+            if(proveedor.isPresent()) {
+                response.setId(persona.get().getId());
+
+                response.setId(persona.get().getId());
+                response.setIdProveedor(proveedor.get().getId());
+                response.setCedula(persona.get().getCedula());
+                response.setNombres(persona.get().getNombres());
+                response.setApellidos(persona.get().getApellidos());
+                response.setTelefono(persona.get().getTelefono());
+                response.setEmail(persona.get().getEmail());
+                response.setFechaNacimiento(persona.get().getFechaNacimiento());
+                response.setDireccion(persona.get().getDireccion());
+                response.setNombreBanco(proveedor.get().getNombrebanco());
+                response.setNumeroCuenta(proveedor.get().getNumeroCuenta());
+                response.setIdPais(proveedor.get().getPais().getId());
+                response.setNombrePais(proveedor.get().getPais().getNombre());
+                response.setNombreCuidad(proveedor.get().getNombreCuidad());
+
+                return response;
+            }else{
+                throw new BadRequestException("No existe un persona con cédula" +cedula);
+            }
+        }else{
+            throw new BadRequestException("No existe un proveedor vinculado a esa persona");
+        }
+    }
+
+
+
+    public boolean updateProveedor(PersonaProveedorRequest personaProveedorRequest){
+        Optional<Persona> optionalPersona = personaRepository.findById(personaProveedorRequest.getId());
+        if(optionalPersona.isPresent()) {
+
+            optionalPersona.get().setCedula(personaProveedorRequest.getCedula());
+            optionalPersona.get().setApellidos(personaProveedorRequest.getApellidos());
+            optionalPersona.get().setNombres(personaProveedorRequest.getNombres());
+            optionalPersona.get().setTelefono(personaProveedorRequest.getTelefono());
+            optionalPersona.get().setEmail( personaProveedorRequest.getEmail());
+            optionalPersona.get().setDireccion(personaProveedorRequest.getDireccion());
+            optionalPersona.get().setFechaNacimiento(personaProveedorRequest.getFechaNacimiento());
+            try{
+                Persona persona = personaRepository.save(optionalPersona.get());
+                if(persona != null){
+                    actualizarProveedor(persona , personaProveedorRequest.getIdPais() , personaProveedorRequest.getNombreBanco(), personaProveedorRequest.getNumeroCuenta() , personaProveedorRequest.getNombreCuidad() );
+
+                }else {
+                    throw new BadRequestException("No se actualizó la persona");
+                }
+            }catch (Exception ex) {
+                throw new BadRequestException("No se actualizó la persona" + ex);
+            }
+        }else{
+            throw new BadRequestException("No existe una persona con id" + personaProveedorRequest.getId());
+        }
+        return false;
+    }
+
+    private boolean actualizarProveedor(Persona persona , Long idPais , String nombreBanco ,String numeroCuenta  , String nombreCuidad){
+
+        Optional<Proveedor> optionalProveedor = proveedorRepository.findByPersona(persona);
+        if(optionalProveedor.isPresent()){
+            optionalProveedor.get().setPersona(persona);
+
+            Optional<Pais> optionalPais =  paisRepository.findById(idPais);
+            Pais pais = optionalPais.get();
+
+
+            if(optionalPais.isPresent()){
+                optionalProveedor.get().setPais(pais);
+                optionalProveedor.get().setNombrebanco(nombreBanco);
+                optionalProveedor.get().setNumeroCuenta(numeroCuenta);
+                optionalProveedor.get().setNombreCuidad(nombreCuidad);
+
+                try{
+
+                    Proveedor proveedor = proveedorRepository.save(optionalProveedor.get());
+
+                    return true;
+                }catch (Exception ex) {
+                    throw new BadRequestException("No se actualizó tbl_proveedor" + ex);
+                }
+
+            }else{
+                throw new BadRequestException("La cuidad ingresada, no está registrada");
+            }
+
+
+
+
+
+
+        }else{
+            throw new BadRequestException("La cedula ingresada, no está registrada");
+        }
+    }
 }

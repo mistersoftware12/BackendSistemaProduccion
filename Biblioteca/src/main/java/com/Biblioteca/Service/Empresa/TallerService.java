@@ -36,8 +36,6 @@ public class TallerService {
 
         List<Taller> taller = tallerRepository.findAll();
 
-
-
         return taller.stream().map( tallerRequest->{
            TallerResponse pcr = new TallerResponse();
 
@@ -65,6 +63,36 @@ public class TallerService {
         }).collect(Collectors.toList());
     }
 
+    public List<TallerResponse> listAllTallerPorScucursaById(Long idSucursal){
+
+        List<Taller> taller = tallerRepository.findAllByIdSucursal(idSucursal);
+
+        return taller.stream().map( tallerRequest->{
+            TallerResponse pcr = new TallerResponse();
+
+            pcr.setId(tallerRequest.getAlmacenBodegaTaller().getId());
+            pcr.setIdTaller(tallerRequest.getId());
+            pcr.setNombre(tallerRequest.getAlmacenBodegaTaller().getNombre());
+            pcr.setDireccion(tallerRequest.getAlmacenBodegaTaller().getDireccion());
+            pcr.setTelefono(tallerRequest.getAlmacenBodegaTaller().getTelefono());
+            pcr.setCorreo(tallerRequest.getAlmacenBodegaTaller().getCorreo());
+            pcr.setResponsable(tallerRequest.getAlmacenBodegaTaller().getResponsable());
+            pcr.setEstado(tallerRequest.getAlmacenBodegaTaller().getEstado());
+            pcr.setIdSucursal(tallerRequest.getSucursal().getId());
+            pcr.setNombreSucursal(tallerRequest.getSucursal().getNombre());
+
+            if(tallerRequest.getAlmacenBodegaTaller().getEstado() == true){
+                pcr.setNombreEstado("Activo");
+            }
+
+            if(tallerRequest.getAlmacenBodegaTaller().getEstado() == false){
+                pcr.setNombreEstado("Inactivo");
+            }
+
+
+            return pcr;
+        }).collect(Collectors.toList());
+    }
     @Transactional
     public AlmacenResponse registrarTaller(TallerRequest tallerRequest ) {
         Optional<AlmacenBodegaTaller> optional1 = almacenBodegaTallerRepository.findByNombreAndBusqueda(tallerRequest.getNombre());

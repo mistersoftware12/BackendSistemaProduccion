@@ -76,21 +76,6 @@ public class Articulo implements Serializable {
 
     private float precioFinal;
 
-
-
-    //herencia
-/*
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="categoria_id", referencedColumnName = "id")
-    private Categoria categoria;
-
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="catalogo_id", referencedColumnName = "id")
-    private Catalogo catalogo;*/
-
-
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "categoria_id",referencedColumnName = "id")
     private Categoria categoria;

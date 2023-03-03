@@ -1,11 +1,9 @@
 package com.Biblioteca.Controller;
 
 
-import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
-import com.Biblioteca.DTO.Catalogo.CatalogoResponse;
-import com.Biblioteca.DTO.Cuidad.CuidadRequest;
-import com.Biblioteca.DTO.Cuidad.CuidadResponse;
-import com.Biblioteca.Service.Cuidad.CuidadService;
+import com.Biblioteca.DTO.Ubicacion.CuidadRequest;
+import com.Biblioteca.DTO.Ubicacion.CuidadResponse;
+import com.Biblioteca.Service.Ubicacion.CuidadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

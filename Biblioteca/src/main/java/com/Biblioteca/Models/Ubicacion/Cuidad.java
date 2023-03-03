@@ -1,4 +1,4 @@
-package com.Biblioteca.Models.Cuidad;
+package com.Biblioteca.Models.Ubicacion;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

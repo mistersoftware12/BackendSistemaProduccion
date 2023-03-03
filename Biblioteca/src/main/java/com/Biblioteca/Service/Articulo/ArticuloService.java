@@ -3,8 +3,6 @@ package com.Biblioteca.Service.Articulo;
 import com.Biblioteca.DTO.Articulo.ArticuloRequest;
 import com.Biblioteca.DTO.Articulo.ArticuloResponse;
 
-import com.Biblioteca.DTO.Categoria.CategoriaResponse;
-import com.Biblioteca.DTO.Extra.ContarResponse;
 import com.Biblioteca.DTO.Extra.MaximoDatoResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Articulo.Articulo;
@@ -41,7 +39,7 @@ public class ArticuloService {
     CatalogoRepository catalogoRepository;
 
 
-    public boolean regitrarArticulo (ArticuloRequest articuloRequest){
+    public ArticuloResponse regitrarArticulo (ArticuloRequest articuloRequest){
 
         if(!getNombre(articuloRequest.getNombre())){
 
@@ -95,7 +93,8 @@ public class ArticuloService {
 
                     try {
                         articuloRepository.save(newArticulo);
-                        return true;
+                        return new ArticuloResponse(newArticulo.getId());
+
                     }catch (Exception e){
                         throw new BadRequestException("No se registró el articulo" +e);
                     }

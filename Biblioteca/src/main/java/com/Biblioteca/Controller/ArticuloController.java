@@ -1,10 +1,13 @@
 package com.Biblioteca.Controller;
 
+import com.Biblioteca.DTO.Articulo.ArticuloProveedorRequest;
+import com.Biblioteca.DTO.Articulo.ArticuloProveedorResponse;
 import com.Biblioteca.DTO.Articulo.ArticuloRequest;
 import com.Biblioteca.DTO.Articulo.ArticuloResponse;
 import com.Biblioteca.DTO.Extra.ContarResponse;
 import com.Biblioteca.DTO.Extra.MaximoDatoResponse;
 import com.Biblioteca.Exceptions.Mensaje;
+import com.Biblioteca.Service.Articulo.ArticuloProveedorService;
 import com.Biblioteca.Service.Articulo.ArticuloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,9 @@ public class ArticuloController {
 
     @Autowired
     ArticuloService articuloService;
+
+    @Autowired
+    ArticuloProveedorService articuloProveedorService;
 
 
     @GetMapping("/allArticulo")
@@ -40,10 +46,16 @@ public class ArticuloController {
     }
 
 
+    @GetMapping("/allArticuloProveedor/{articulo_id}")
+    public ResponseEntity<List<ArticuloProveedorResponse>> allArticuloProveedor(@PathVariable Long articulo_id){
+        List<ArticuloProveedorResponse> allArticulosProveedr = articuloProveedorService.listAllArticuloProveedor(articulo_id);
+        return new ResponseEntity<>(allArticulosProveedr, HttpStatus.OK);
+    }
 
-    @GetMapping("/allByMaximoCodigoBarra/{id}")
-    public ResponseEntity<MaximoDatoResponse> ContarMaximoCodigoBarraById(@PathVariable Long id){
-        MaximoDatoResponse  info = articuloService.CapturarMaximoCodigoBarraById(id);
+
+    @GetMapping("/allByMaximoCodigoBarra/{categoria_id}")
+    public ResponseEntity<MaximoDatoResponse> ContarMaximoCodigoBarraById(@PathVariable Long categoria_id){
+        MaximoDatoResponse  info = articuloService.CapturarMaximoCodigoBarraById(categoria_id);
         return new ResponseEntity<>(info, HttpStatus.OK);
     }
 
@@ -52,6 +64,12 @@ public class ArticuloController {
     public ResponseEntity<?> registroArticulo(@RequestBody ArticuloRequest request){
 
         return new ResponseEntity<>(articuloService.regitrarArticulo(request), HttpStatus.OK);
+    }
+
+    @PostMapping("/registrarArticuloProveedor")
+    public ResponseEntity<?> registroArticuloProveedor(@RequestBody ArticuloProveedorRequest request){
+
+        return new ResponseEntity<>(articuloProveedorService.regitrarArticuloProveedor(request), HttpStatus.OK);
     }
 
 

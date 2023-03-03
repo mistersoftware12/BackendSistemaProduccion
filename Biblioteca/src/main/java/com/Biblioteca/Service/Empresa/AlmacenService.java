@@ -60,7 +60,34 @@ public class AlmacenService {
         }).collect(Collectors.toList());
     }
 
+    public List<AlmacenResponse > listAllAlmacenPorScucursaById(Long idSucursal){
 
+        List<Almacen> almacen = almacenRepository.findAllByIdSucursal(idSucursal);
+
+        return almacen.stream().map( almacenRequest->{
+            AlmacenResponse pcr = new AlmacenResponse();
+            pcr.setId(almacenRequest.getAlmacenBodegaTaller().getId());
+            pcr.setIdAlmacen(almacenRequest.getId());
+            pcr.setNombre(almacenRequest.getAlmacenBodegaTaller().getNombre());
+            pcr.setDireccion(almacenRequest.getAlmacenBodegaTaller().getDireccion());
+            pcr.setTelefono(almacenRequest.getAlmacenBodegaTaller().getTelefono());
+            pcr.setCorreo(almacenRequest.getAlmacenBodegaTaller().getCorreo());
+            pcr.setResponsable(almacenRequest.getAlmacenBodegaTaller().getResponsable());
+            pcr.setEstado(almacenRequest.getAlmacenBodegaTaller().getEstado());
+            pcr.setIdSucursal(almacenRequest.getSucursal().getId());
+            pcr.setNombreSucursal(almacenRequest.getSucursal().getNombre());
+
+            if(almacenRequest.getAlmacenBodegaTaller().getEstado() == true){
+                pcr.setNombreEstado("Activo");
+            }
+
+            if(almacenRequest.getAlmacenBodegaTaller().getEstado() == false){
+                pcr.setNombreEstado("Inactivo");
+            }
+
+            return pcr;
+        }).collect(Collectors.toList());
+    }
 
     @Transactional
     public AlmacenResponse registrarAlmacen(AlmacenRequest almacenRequest) {

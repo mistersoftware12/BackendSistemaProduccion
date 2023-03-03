@@ -1,21 +1,15 @@
-package com.Biblioteca.Service.Cuidad;
+package com.Biblioteca.Service.Ubicacion;
 
-import com.Biblioteca.DTO.Cuidad.CuidadRequest;
-import com.Biblioteca.DTO.Cuidad.CuidadResponse;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalRequest;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalResponse;
+import com.Biblioteca.DTO.Ubicacion.CuidadRequest;
+import com.Biblioteca.DTO.Ubicacion.CuidadResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
-import com.Biblioteca.Models.Cuidad.Cuidad;
-import com.Biblioteca.Models.Empresa.Sucursal;
-import com.Biblioteca.Repository.CuidadRepository;
-import com.Biblioteca.Repository.Empresa.SucursalRepository;
+import com.Biblioteca.Models.Ubicacion.Cuidad;
+import com.Biblioteca.Repository.Ubicacion.CuidadRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -60,25 +54,6 @@ public class CuidadService {
         }).collect(Collectors.toList());
     }
 
-
-    /*
-    @Transactional
-    public boolean actualizardatosSucursal(SucursalRequest sucursalRequest){
-        Optional<Sucursal> sucursal = sucursalRepository.findById(sucursalRequest.getId());
-
-        if(sucursal.isPresent()){
-            sucursal.get().setNombre(sucursalRequest.getNombre());
-            sucursal.get().setLogo(sucursalRequest.getLogo());
-            try{
-                sucursalRepository.save(sucursal.get());
-                return true;
-            }catch (Exception ex) {
-                throw new BadRequestException("No se actualizo" + ex);
-            }
-        } else {
-            throw new BadRequestException("No existe un evento con id "+sucursalRequest.getId() );
-        }
-    }*/
 
     private boolean getNombre(String nombre) {
         return  cuidadRepository.existsByNombre(nombre);
