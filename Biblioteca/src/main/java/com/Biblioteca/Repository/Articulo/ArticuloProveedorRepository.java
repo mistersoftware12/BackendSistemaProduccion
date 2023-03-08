@@ -15,7 +15,6 @@ public interface ArticuloProveedorRepository extends JpaRepository<ArticuloProve
     @Query(value = "SELECT * FROM articulo_proveedor WHERE articulo_id = :idArticulo", nativeQuery = true)
     List<ArticuloProveedor> findByArticuloId(Long idArticulo);
 
-    // List<DatosEstadicticasMesAnio> findAllByMesandAnio(Long mes, Long anio);
 
 
 
