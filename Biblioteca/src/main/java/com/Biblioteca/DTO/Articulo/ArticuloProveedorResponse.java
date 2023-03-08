@@ -12,6 +12,8 @@ public class ArticuloProveedorResponse implements Serializable {
     private Long idArticulo;
     private Long idProveedor;
 
+    private String nombreProveedor;
+
     public ArticuloProveedorResponse(Long id, Long idArticulo, Long idProveedor) {
         this.id = id;
         this.idArticulo = idArticulo;

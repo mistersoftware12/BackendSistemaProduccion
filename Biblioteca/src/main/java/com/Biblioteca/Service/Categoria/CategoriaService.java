@@ -76,6 +76,31 @@ public class CategoriaService {
     }
 
 
+    public List<CategoriaResponse> listAllCategoriaEstado(boolean estado) {
+        List<Categoria> categoria = categoriaRepository.findByEstado(estado);
+
+        return categoria.stream().map(categoriaRequest->{
+
+            CategoriaResponse response = new CategoriaResponse();
+
+            response.setId(categoriaRequest.getId());
+            response.setNombre(categoriaRequest.getNombre());
+            response.setEstado(categoriaRequest.getEstado());
+            response.setInicialCodigo(categoriaRequest.getInicialCodigo());
+
+            if(categoriaRequest.getEstado() == true){
+                response.setNombreEstado("Activo");
+            }
+
+            if(categoriaRequest.getEstado()==false){
+                response.setNombreEstado("Inactivo");
+            }
+
+            return response;
+        }).collect(Collectors.toList());
+    }
+
+
     public CategoriaResponse categoriaById (Long id){
 
         CategoriaResponse response = new CategoriaResponse();

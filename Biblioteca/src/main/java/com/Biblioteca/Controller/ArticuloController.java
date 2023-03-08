@@ -79,4 +79,11 @@ public class ArticuloController {
         return new ResponseEntity(new Mensaje("Artículo Actualizado"), HttpStatus.OK);
     }
 
+
+    @DeleteMapping("/deleteProveedorArticulo/{id}")
+    public ResponseEntity<?> deleteProveedorDeArticulo(@PathVariable Long id){
+        articuloProveedorService.deleteById(id);
+        return  new ResponseEntity<>(new Mensaje("Proveedor eliminado"),HttpStatus.OK);
+    }
+
 }

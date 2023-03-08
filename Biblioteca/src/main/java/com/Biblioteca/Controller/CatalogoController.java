@@ -2,6 +2,7 @@ package com.Biblioteca.Controller;
 
 import com.Biblioteca.DTO.Catalogo.CatalogoRequest;
 import com.Biblioteca.DTO.Catalogo.CatalogoResponse;
+import com.Biblioteca.DTO.Categoria.CategoriaResponse;
 import com.Biblioteca.Exceptions.Mensaje;
 import com.Biblioteca.Service.Catalogo.CatalogoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,13 @@ public class CatalogoController {
         List<CatalogoResponse> allCatalogos = catalogoService.listAllCatalogo();
         return new ResponseEntity<>(allCatalogos, HttpStatus.OK);
     }
+
+    @GetMapping("/allCatalogoEstado/{estado}")
+    public ResponseEntity<List<CatalogoResponse>> allArticuloProveedor(@PathVariable boolean estado){
+        List<CatalogoResponse> allCatalogos = catalogoService.listAllCatalogoEstado(estado);
+        return new ResponseEntity<>(allCatalogos, HttpStatus.OK);
+    }
+
 
     @PutMapping("/updateCatalogo")
     public ResponseEntity<?> updateCatalogo(@RequestBody CatalogoRequest catalogoRequest){

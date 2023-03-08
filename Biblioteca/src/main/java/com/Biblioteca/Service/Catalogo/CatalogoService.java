@@ -58,6 +58,21 @@ public class CatalogoService {
         }).collect(Collectors.toList());
     }
 
+    public List<CatalogoResponse> listAllCatalogoEstado(Boolean estado) {
+        List<Catalogo> catalogo = catalogoRepository.findByEstado(estado);
+
+        return catalogo.stream().map(catalogoRequest->{
+
+            CatalogoResponse response = new CatalogoResponse();
+
+            response.setId(catalogoRequest.getId());
+            response.setNombre(catalogoRequest.getNombre());
+            response.setEstado(catalogoRequest.getEstado());
+
+            return response;
+        }).collect(Collectors.toList());
+    }
+
     @Transactional
     public boolean actualizardatosCatalogo(CatalogoRequest catalogoRequest ){
         Optional<Catalogo> catalogo = catalogoRepository.findById(catalogoRequest.getId());

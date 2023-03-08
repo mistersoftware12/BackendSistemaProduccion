@@ -11,6 +11,6 @@ public class ArticuloProveedorRequest implements Serializable {
     private Long id;
     private Long idArticulo;
     private Long idProveedor;
-
+    private String nombreProveedor;
 
 }

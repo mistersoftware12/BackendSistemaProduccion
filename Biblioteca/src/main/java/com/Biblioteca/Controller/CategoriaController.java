@@ -1,5 +1,7 @@
 package com.Biblioteca.Controller;
 
+import com.Biblioteca.DTO.Articulo.ArticuloProveedorResponse;
+import com.Biblioteca.DTO.Articulo.ArticuloResponse;
 import com.Biblioteca.DTO.Categoria.CategoriaRequest;
 import com.Biblioteca.DTO.Categoria.CategoriaResponse;
 import com.Biblioteca.Exceptions.Mensaje;
@@ -29,6 +31,13 @@ public class CategoriaController {
     public ResponseEntity<List<CategoriaResponse>> allCategoria(){
         List<CategoriaResponse> allCategoria = categoriaService.listAllCategoria();
         return new ResponseEntity<>(allCategoria, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/allCategoriaEstado/{estado}")
+    public ResponseEntity<List<CategoriaResponse>> allArticuloProveedor(@PathVariable boolean estado){
+        List<CategoriaResponse> allCategorias = categoriaService.listAllCategoriaEstado(estado);
+        return new ResponseEntity<>(allCategorias, HttpStatus.OK);
     }
 
     @PutMapping("/updateCategoria")

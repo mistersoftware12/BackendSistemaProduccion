@@ -3,13 +3,9 @@ package com.Biblioteca.Service.Articulo;
 
 import com.Biblioteca.DTO.Articulo.ArticuloProveedorRequest;
 import com.Biblioteca.DTO.Articulo.ArticuloProveedorResponse;
-import com.Biblioteca.DTO.empresa.sucursales.SucursalRequest;
-import com.Biblioteca.DTO.empresa.sucursales.TallerResponse;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Articulo.Articulo;
 import com.Biblioteca.Models.Articulo.ArticuloProveedor;
-import com.Biblioteca.Models.Empresa.Sucursal;
-import com.Biblioteca.Models.Empresa.Sucursales.Taller;
 import com.Biblioteca.Models.Persona.Proveedor;
 import com.Biblioteca.Repository.Articulo.ArticuloProveedorRepository;
 import com.Biblioteca.Repository.Articulo.ArticuloRepository;
@@ -41,7 +37,8 @@ public class ArticuloProveedorService {
 
     public List<ArticuloProveedorResponse> listAllArticuloProveedor(Long idArticulo){
 
-        Optional<ArticuloProveedor> articuloProveedors = articuloProveedorRepository.findByArticuloId(idArticulo);
+        List<ArticuloProveedor> articuloProveedors = articuloProveedorRepository.findByArticuloId(idArticulo);
+
 
         return articuloProveedors.stream().map( artTalRequest->{
 
@@ -49,6 +46,7 @@ public class ArticuloProveedorService {
             pcr.setId(artTalRequest.getId());
             pcr.setIdArticulo(artTalRequest.getArticulo().getId());
             pcr.setIdProveedor(artTalRequest.getProveedor().getId());
+            pcr.setNombreProveedor(artTalRequest.getProveedor().getPersona().getNombres()+" "+artTalRequest.getProveedor().getPersona().getApellidos());
             return pcr;
         }).collect(Collectors.toList());
     }
@@ -95,6 +93,17 @@ public class ArticuloProveedorService {
 
     }
 
+    public void deleteById(Long id) {
+
+        Optional<ArticuloProveedor> optional = articuloProveedorRepository.findById(id);
+        if (optional.isPresent()) {
+            articuloProveedorRepository.deleteById(id);
+
+        } else {
+            throw new BadRequestException("El Articulo Proveedor con el id " + id + ", no existe");
+        }
+    }
+
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -105,5 +114,9 @@ public class ArticuloProveedorService {
         nativeQuery.setParameter(2, idProveedor);
         return (BigInteger) nativeQuery.getSingleResult();
     }
+
+
+
+
 
 }
