@@ -1,11 +1,14 @@
 package com.Biblioteca.Service.Articulo;
 
 
+import com.Biblioteca.DTO.Articulo.ArticuloProveedorListaResponse;
 import com.Biblioteca.DTO.Articulo.ArticuloProveedorRequest;
 import com.Biblioteca.DTO.Articulo.ArticuloProveedorResponse;
+import com.Biblioteca.DTO.empresa.sucursales.SucursalRequest;
 import com.Biblioteca.Exceptions.BadRequestException;
 import com.Biblioteca.Models.Articulo.Articulo;
 import com.Biblioteca.Models.Articulo.ArticuloProveedor;
+import com.Biblioteca.Models.Empresa.Sucursal;
 import com.Biblioteca.Models.Persona.Proveedor;
 import com.Biblioteca.Repository.Articulo.ArticuloProveedorRepository;
 import com.Biblioteca.Repository.Articulo.ArticuloRepository;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +39,7 @@ public class ArticuloProveedorService {
 
 
 
-    public List<ArticuloProveedorResponse> listAllArticuloProveedor(Long idArticulo){
+    public List<ArticuloProveedorResponse> listAllArticuloProveedorByIdArticulo(Long idArticulo){
 
         List<ArticuloProveedor> articuloProveedors = articuloProveedorRepository.findByArticuloId(idArticulo);
 
@@ -47,6 +51,28 @@ public class ArticuloProveedorService {
             pcr.setIdArticulo(artTalRequest.getArticulo().getId());
             pcr.setIdProveedor(artTalRequest.getProveedor().getId());
             pcr.setNombreProveedor(artTalRequest.getProveedor().getPersona().getNombres()+" "+artTalRequest.getProveedor().getPersona().getApellidos());
+            pcr.setPrecioCompra(artTalRequest.getPrecioCompra());
+            return pcr;
+        }).collect(Collectors.toList());
+    }
+
+
+    public List<ArticuloProveedorListaResponse> listAllArticuloProveedorByIdProveedor(Long idProveedor){
+
+        List<ArticuloProveedor> articuloProveedors = articuloProveedorRepository.findByProveedorId(idProveedor);
+
+        return articuloProveedors.stream().map( artTalRequest->{
+
+            ArticuloProveedorListaResponse pcr = new ArticuloProveedorListaResponse();
+            pcr.setId(artTalRequest.getId());
+            pcr.setIdArticulo(artTalRequest.getArticulo().getId());
+            pcr.setIdProveedor(artTalRequest.getProveedor().getId());
+            pcr.setNombreProveedor(artTalRequest.getProveedor().getPersona().getNombres()+" "+artTalRequest.getProveedor().getPersona().getApellidos());
+            pcr.setPrecioCompra(artTalRequest.getPrecioCompra());
+            pcr.setCodigoBarra(artTalRequest.getArticulo().getCodigoBarra());
+            pcr.setFoto(artTalRequest.getArticulo().getFoto());
+            pcr.setNombreArticulo(artTalRequest.getArticulo().getNombre());
+            pcr.setDescripcion(artTalRequest.getArticulo().getDescripcion());
             return pcr;
         }).collect(Collectors.toList());
     }
@@ -67,14 +93,14 @@ public class ArticuloProveedorService {
                     ArticuloProveedor neArticuloProveedor = new ArticuloProveedor();
                     neArticuloProveedor.setArticulo(optionalArticulo.get());
                     neArticuloProveedor.setProveedor(optionalProveedor.get());
-
+                    neArticuloProveedor.setPrecioCompra(articuloProveedorRequest.getPrecioCompra());
 
                     try {
                         articuloProveedorRepository.save(neArticuloProveedor);
                         return true;
 
                     }catch (Exception e){
-                        throw new BadRequestException("No se registró la sucursal" +e);
+                        throw new BadRequestException("No se registró el articulo proveedor" +e);
 
                     }
 
@@ -90,6 +116,25 @@ public class ArticuloProveedorService {
             throw new BadRequestException("No existe un articulo con id: "+articuloProveedorRequest.getIdArticulo());
         }
 
+
+    }
+
+    @Transactional
+    public boolean actualizarPrecioArticuloProveedor(ArticuloProveedorRequest articuloProveedorRequest){
+
+        Optional<ArticuloProveedor> articuloProveedor = articuloProveedorRepository.findById(articuloProveedorRequest.getId());
+
+        if(articuloProveedor.isPresent()){
+            articuloProveedor.get().setPrecioCompra((articuloProveedorRequest.getPrecioCompra()));
+            try{
+                articuloProveedorRepository.save(articuloProveedor.get());
+                return true;
+            }catch (Exception ex) {
+                throw new BadRequestException("No se actualizo" + ex);
+            }
+        } else {
+            throw new BadRequestException("No existe un articulo proveedor con id "+articuloProveedorRequest.getId() );
+        }
 
     }
 

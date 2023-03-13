@@ -13,7 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,34 +95,40 @@ public class AlmacenService {
 
     @Transactional
     public AlmacenResponse registrarAlmacen(AlmacenRequest almacenRequest) {
-        Optional<AlmacenBodegaTaller> optional1 = almacenBodegaTallerRepository.findByNombreAndBusqueda(almacenRequest.getNombre());
-         if (!optional1.isPresent()) {
-             AlmacenBodegaTaller newAlmBoTaller = new  AlmacenBodegaTaller();
 
-             newAlmBoTaller.setNombre(almacenRequest.getNombre());
-             newAlmBoTaller.setDireccion(almacenRequest.getDireccion());
-             newAlmBoTaller.setTelefono(almacenRequest.getTelefono());
-             newAlmBoTaller.setCorreo(almacenRequest.getCorreo());
-             newAlmBoTaller.setResponsable(almacenRequest.getResponsable());
-             newAlmBoTaller.setEstado(almacenRequest.getEstado());
+        if(countSucursal(almacenRequest.getIdSucursal()) == BigInteger.valueOf(0)){
+            Optional<AlmacenBodegaTaller> optional1 = almacenBodegaTallerRepository.findByNombreAndBusquedaAlmacen(almacenRequest.getNombre());
+            if (!optional1.isPresent()) {
+                AlmacenBodegaTaller newAlmBoTaller = new  AlmacenBodegaTaller();
 
-
-           AlmacenBodegaTaller almacenBodegaTaller = almacenBodegaTallerRepository.save(newAlmBoTaller);
-
-
-            if (almacenBodegaTaller != null) {
-
-                guardarAlmacen(almacenBodegaTaller.getId(), (almacenRequest.getIdSucursal()));
+                newAlmBoTaller.setNombre(almacenRequest.getNombre());
+                newAlmBoTaller.setDireccion(almacenRequest.getDireccion());
+                newAlmBoTaller.setTelefono(almacenRequest.getTelefono());
+                newAlmBoTaller.setCorreo(almacenRequest.getCorreo());
+                newAlmBoTaller.setResponsable(almacenRequest.getResponsable());
+                newAlmBoTaller.setEstado(almacenRequest.getEstado());
 
 
-return  new AlmacenResponse();
+                AlmacenBodegaTaller almacenBodegaTaller = almacenBodegaTallerRepository.save(newAlmBoTaller);
+
+
+                if (almacenBodegaTaller != null) {
+
+                    guardarAlmacen(almacenBodegaTaller.getId(), (almacenRequest.getIdSucursal()));
+
+
+                    return  new AlmacenResponse();
+
+                } else {
+                    throw new BadRequestException("No se pudo guardar el almaceno" + almacenBodegaTaller.getNombre());
+                }
 
             } else {
-                throw new BadRequestException("No se pudo guardar el almaceno" + almacenBodegaTaller.getNombre());
+                throw new BadRequestException("Ya registrado un almacen con el mismo nombre: " +almacenRequest.getNombre());
             }
 
-        } else {
-            throw new BadRequestException("Ya registrado un almacen con el mismo nombre: " +almacenRequest.getNombre());
+        }else{
+            throw new BadRequestException("Ya existe un almacen registrado para la sucursal " +almacenRequest.getIdSucursal());
         }
 
 
@@ -219,6 +229,16 @@ return  new AlmacenResponse();
             }
         }
         throw new BadRequestException("NO EXISTE EL TALLER");
+    }
+
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public BigInteger countSucursal(Long idSucursal) {
+        Query nativeQuery = entityManager.createNativeQuery("SELECT COUNT(sucursal_id) FROM almacen WHERE sucursal_id =?");
+        nativeQuery.setParameter(1, idSucursal);
+        return (BigInteger) nativeQuery.getSingleResult();
     }
 
 }

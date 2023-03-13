@@ -10,18 +10,13 @@ public interface AlmacenBodegaTallerRepository extends JpaRepository<AlmacenBode
 
 
     @Query(value = "SELECT * FROM almacen a INNER JOIN almacen_bodega_taller c ON a.almacen_bodega_taller_id = c.id where UPPER(c.nombre) = UPPER(:nombre)", nativeQuery = true)
-    Optional<AlmacenBodegaTaller> findByNombreAndBusqueda(String nombre);
+    Optional<AlmacenBodegaTaller> findByNombreAndBusquedaAlmacen(String nombre);
 
+    @Query(value = "SELECT * FROM bodega a INNER JOIN almacen_bodega_taller c ON a.almacen_bodega_taller_id = c.id where UPPER(c.nombre) = UPPER(:nombre)", nativeQuery = true)
+    Optional<AlmacenBodegaTaller> findByNombreAndBusquedaBodega(String nombre);
 
-    /*
-    Optional<CursoTaller> findByNombre(String nombre);
+    @Query(value = "SELECT * FROM taller a INNER JOIN almacen_bodega_taller c ON a.almacen_bodega_taller_id = c.id where UPPER(c.nombre) = UPPER(:nombre)", nativeQuery = true)
+    Optional<AlmacenBodegaTaller> findByNombreAndBusquedaTaller(String nombre);
 
-
-    Boolean existsByNombre(String nombre);
-
-
-    @Query(value = "SELECT * FROM curso_taller ct join taller ta on ta.curso_taller_id= ct.id  where ct.nombre =:nombre and ct.fecha_inicio=:fechaInicio", nativeQuery = true)
-    Optional<CursoTaller> findDistinctByNombreAndFechaInicio(String nombre, Date fechaInicio);
-     */
 
 }

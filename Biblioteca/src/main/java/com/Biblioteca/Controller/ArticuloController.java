@@ -1,9 +1,6 @@
 package com.Biblioteca.Controller;
 
-import com.Biblioteca.DTO.Articulo.ArticuloProveedorRequest;
-import com.Biblioteca.DTO.Articulo.ArticuloProveedorResponse;
-import com.Biblioteca.DTO.Articulo.ArticuloRequest;
-import com.Biblioteca.DTO.Articulo.ArticuloResponse;
+import com.Biblioteca.DTO.Articulo.*;
 import com.Biblioteca.DTO.Extra.ContarResponse;
 import com.Biblioteca.DTO.Extra.MaximoDatoResponse;
 import com.Biblioteca.Exceptions.Mensaje;
@@ -46,9 +43,15 @@ public class ArticuloController {
     }
 
 
-    @GetMapping("/allArticuloProveedor/{articulo_id}")
-    public ResponseEntity<List<ArticuloProveedorResponse>> allArticuloProveedor(@PathVariable Long articulo_id){
-        List<ArticuloProveedorResponse> allArticulosProveedr = articuloProveedorService.listAllArticuloProveedor(articulo_id);
+    @GetMapping("/allArticuloProveedorByArticuloid/{articulo_id}")
+    public ResponseEntity<List<ArticuloProveedorResponse>> allArticuloProveedorByIdArticulo(@PathVariable Long articulo_id){
+        List<ArticuloProveedorResponse> allArticulosProveedr = articuloProveedorService.listAllArticuloProveedorByIdArticulo(articulo_id);
+        return new ResponseEntity<>(allArticulosProveedr, HttpStatus.OK);
+    }
+
+    @GetMapping("/allArticuloProveedorByProveedorid/{proveedor_id}")
+    public ResponseEntity<List<ArticuloProveedorListaResponse>> allArticuloProveedorByIdProveedor(@PathVariable Long proveedor_id){
+        List<ArticuloProveedorListaResponse> allArticulosProveedr = articuloProveedorService.listAllArticuloProveedorByIdProveedor(proveedor_id);
         return new ResponseEntity<>(allArticulosProveedr, HttpStatus.OK);
     }
 
@@ -77,6 +80,13 @@ public class ArticuloController {
     public ResponseEntity<?> updateArticulo(@RequestBody ArticuloRequest articuloRequest){
         articuloService.actualizardatosArticulo(articuloRequest);
         return new ResponseEntity(new Mensaje("Artículo Actualizado"), HttpStatus.OK);
+    }
+
+
+    @PutMapping("/updatePrecioArticuloProveedor")
+    public ResponseEntity<?> updatePrecioArticuloProveedor(@RequestBody ArticuloProveedorRequest articuloProveedorRequest){
+        articuloProveedorService.actualizarPrecioArticuloProveedor(articuloProveedorRequest);
+        return new ResponseEntity(new Mensaje("Precio Actualizado"), HttpStatus.OK);
     }
 
 

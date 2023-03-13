@@ -14,10 +14,14 @@ public class ArticuloProveedorResponse implements Serializable {
 
     private String nombreProveedor;
 
-    public ArticuloProveedorResponse(Long id, Long idArticulo, Long idProveedor) {
+    private float precioCompra;
+
+    public ArticuloProveedorResponse(Long id, Long idArticulo, Long idProveedor, String nombreProveedor, float precioCompra) {
         this.id = id;
         this.idArticulo = idArticulo;
         this.idProveedor = idProveedor;
+        this.nombreProveedor = nombreProveedor;
+        this.precioCompra = precioCompra;
     }
 
     public ArticuloProveedorResponse() {

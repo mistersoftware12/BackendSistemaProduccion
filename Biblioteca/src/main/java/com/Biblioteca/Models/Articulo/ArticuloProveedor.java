@@ -29,4 +29,6 @@ public class ArticuloProveedor implements Serializable {
     @JoinColumn(name = "proveedor_id",referencedColumnName = "id")
     private Proveedor proveedor;
 
+
+    private float precioCompra;
 }
