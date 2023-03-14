@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'production'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
@@ -48,6 +48,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'sistemakadapa'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_c8e9e49b78cd4d929dfc5474095e7efe }}
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AD9332F4E16743E3921E888CFB72A582 }}
           package: '*.jar'
